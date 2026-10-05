@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { useNavigate, Link } from 'react-router-dom';
-import { Menu, User, LogOut, ChevronDown, Bell, Shield, Globe, Award, BookOpen, BellRing } from 'lucide-react';
+import { Menu, User, LogOut, ChevronDown, Bell, Shield, Globe, Award, BookOpen, BellRing, Sun, Moon } from 'lucide-react';
 import { getTranslation } from '../utils/translations';
 import { useNotifications } from '../hooks/useNotifications';
 import { formatDate } from '../utils/formatters';
+import { useDesign } from '../context/DesignContext';
 
 const Navbar = ({ onMenuToggle }) => {
   const { user, logout } = useAuth();
@@ -14,6 +15,7 @@ const Navbar = ({ onMenuToggle }) => {
   const [showLangDropdown, setShowLangDropdown] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false);
   const { notifications, unreadCount, readIds, markAsRead, markAllAsRead } = useNotifications();
+  const { theme, toggleTheme } = useDesign();
 
   const selectLanguage = (lang) => {
     localStorage.setItem('language', lang);
@@ -90,7 +92,14 @@ const Navbar = ({ onMenuToggle }) => {
           )}
         </div>
 
-
+        {/* Dark Mode Toggle */}
+        <button
+          onClick={toggleTheme}
+          className="p-2 rounded-xl text-cognitive-on-surface-variant hover:text-cognitive-on-surface hover:bg-cognitive-primary/5 transition-all"
+          aria-label="Toggle Dark Mode"
+        >
+          {theme === 'dark' ? <Sun className="w-4.5 h-4.5 text-amber-400 animate-pulse-slow" /> : <Moon className="w-4.5 h-4.5 text-slate-400" />}
+        </button>
 
         {/* Notifications */}
         <div className="relative">

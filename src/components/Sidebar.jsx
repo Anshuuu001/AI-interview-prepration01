@@ -3,7 +3,7 @@ import { NavLink, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { getTranslation } from '../utils/translations';
 import {
-  LayoutDashboard, FileText, Video, ClipboardList, Camera,
+  LayoutDashboard, Video, ClipboardList, Camera,
   MessageSquare, ShieldCheck, Settings, LogOut, X, Zap, TrendingUp, Code2
 } from 'lucide-react';
 
@@ -17,20 +17,20 @@ const Sidebar = ({ isOpen, onClose }) => {
     if (onClose) onClose();
   };
 
-  const studentLinks = [
-    { to: '/dashboard',  label: getTranslation('dashboard'),        icon: LayoutDashboard, color: 'from-violet-500 to-indigo-500' },
-    { to: '/analytics',  label: getTranslation('analytics'),        icon: TrendingUp,       color: 'from-fuchsia-500 to-indigo-500' },
-    { to: '/interview',  label: getTranslation('interviews'),       icon: Video,            color: 'from-blue-500 to-cyan-500' },
-    { to: '/video-interview', label: getTranslation('videoInterview'), icon: Camera,        color: 'from-emerald-500 to-teal-500' },
-    { to: '/aptitude',   label: getTranslation('aptitudeTest'),    icon: ClipboardList,    color: 'from-amber-500 to-orange-500' },
-    { to: '/practice',   label: getTranslation('codingPractice'),  icon: Code2,            color: 'from-rose-500 to-red-500' },
-    { to: '/chat',       label: getTranslation('careerAssistant'), icon: MessageSquare,    color: 'from-indigo-500 to-purple-500' },
-    { to: '/profile',    label: getTranslation('settings'),         icon: Settings,         color: 'from-slate-450 to-slate-550' },
+  const candidateLinks = [
+    { to: '/dashboard', label: getTranslation('dashboard'), icon: LayoutDashboard, color: 'from-violet-500 to-indigo-500' },
+    { to: '/chat', label: 'Career Assistant', icon: MessageSquare, color: 'from-indigo-500 to-purple-500' },
+    { to: '/analytics', label: getTranslation('analytics'), icon: TrendingUp, color: 'from-fuchsia-500 to-indigo-500' },
+    { to: '/interview', label: getTranslation('interviews'), icon: Video, color: 'from-blue-500 to-cyan-500' },
+    { to: '/video-interview', label: getTranslation('videoInterview'), icon: Camera, color: 'from-emerald-500 to-teal-500' },
+    { to: '/aptitude', label: getTranslation('aptitudeTest'), icon: ClipboardList, color: 'from-amber-500 to-orange-500' },
+    { to: '/practice', label: getTranslation('codingPractice'), icon: Code2, color: 'from-rose-500 to-red-500' },
+    { to: '/profile', label: getTranslation('settings'), icon: Settings, color: 'from-slate-400 to-slate-500' },
   ];
 
   const adminLinks = [
-    { to: '/admin/dashboard',  label: 'Super Admin',         icon: ShieldCheck, color: 'from-rose-500 to-pink-500' },
-    { to: '/admin/questions',  label: 'Question Bank',       icon: Settings,    color: 'from-slate-400 to-slate-500' },
+    { to: '/admin/dashboard', label: 'Super Admin', icon: ShieldCheck, color: 'from-rose-500 to-pink-500' },
+    { to: '/admin/questions', label: 'Question Bank', icon: Settings, color: 'from-slate-400 to-slate-500' },
   ];
 
   const renderLinks = (links) =>
@@ -45,10 +45,10 @@ const Sidebar = ({ isOpen, onClose }) => {
       >
         {({ isActive }) => (
           <>
-            <span className={`w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 bg-gradient-to-br ${link.color} ${isActive ? 'shadow-lg shadow-indigo-500/20 scale-105' : 'opacity-70 group-hover:opacity-100 group-hover:scale-105'} transition-all duration-200`}>
+            <span className={`w-8 h-8 rounded-xl flex items-center justify-center flex-shrink-0 bg-gradient-to-br ${link.color} ${isActive ? 'shadow-lg shadow-indigo-500/25 scale-105' : 'opacity-70 group-hover:opacity-100 group-hover:scale-105'} transition-all duration-200`}>
               <link.icon className="w-4 h-4 text-white" />
             </span>
-            <span className="font-sans font-medium transition-colors group-hover:text-slate-100">{link.label}</span>
+            <span className="font-sans text-sm font-medium text-slate-400 dark:text-slate-300 transition-colors group-hover:text-slate-900 dark:group-hover:text-slate-100">{link.label}</span>
             {isActive && (
               <span className="ml-auto w-1.5 h-1.5 rounded-full bg-cognitive-primary animate-pulse" />
             )}
@@ -81,10 +81,9 @@ const Sidebar = ({ isOpen, onClose }) => {
         }}
       >
         {/* Logo Header */}
-        <div className="h-16 flex items-center justify-between px-5 flex-shrink-0"
+        <div className="h-16 flex items-center justify-between px-6 flex-shrink-0"
           style={{ borderBottom: '1px solid var(--sidebar-border)' }}>
           <div className="flex items-center gap-3">
-            {/* 3D Logo badge */}
             <div className="relative w-9 h-9 flex-shrink-0">
               <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-cognitive-primary to-cognitive-secondary flex items-center justify-center shadow-lg"
                 style={{ boxShadow: '0 4px 14px rgba(79,70,229,0.35), 0 1px 0 rgba(255,255,255,0.2) inset' }}>
@@ -108,17 +107,18 @@ const Sidebar = ({ isOpen, onClose }) => {
         </div>
 
         {/* Nav Links */}
-        <div className="flex-1 overflow-y-auto px-3 py-5 space-y-6">
+        <div className="flex-1 overflow-y-auto px-4 py-6 space-y-6">
+          {/* Candidate Section */}
           <div className="space-y-1">
-            <p className="px-3 text-[10px] font-display font-semibold text-slate-600 uppercase tracking-[0.15em] mb-3">
+            <p className="px-3 text-[10px] font-display font-semibold text-slate-600 dark:text-slate-400 uppercase tracking-[0.15em] mb-3">
               {getTranslation('candidatePortal')}
             </p>
-            {renderLinks(studentLinks)}
+            {renderLinks(candidateLinks)}
           </div>
 
           {user?.role === 'admin' && (
             <div className="space-y-1" style={{ borderTop: '1px solid rgba(139,92,246,0.1)', paddingTop: '1.25rem' }}>
-              <p className="px-3 text-[10px] font-display font-semibold text-slate-600 uppercase tracking-[0.15em] mb-3">
+              <p className="px-3 text-[10px] font-display font-semibold text-slate-600 dark:text-slate-400 uppercase tracking-[0.15em] mb-3">
                 {getTranslation('administration')}
               </p>
               {renderLinks(adminLinks)}
@@ -127,9 +127,8 @@ const Sidebar = ({ isOpen, onClose }) => {
         </div>
 
         {/* User Footer */}
-        <div className="p-3 flex-shrink-0" style={{ borderTop: '1px solid var(--sidebar-border)' }}>
-          {/* User card */}
-          <div className="flex items-center gap-3 p-3 rounded-xl mb-2.5 bg-slate-900/5 dark:bg-white/5 border border-slate-200/50 dark:border-slate-800/80">
+        <div className="p-4 flex-shrink-0" style={{ borderTop: '1px solid var(--sidebar-border)' }}>
+          <div className="flex items-center gap-3 p-3 rounded-xl mb-3 bg-slate-900/5 dark:bg-white/5 border border-slate-200/50 dark:border-slate-800/80">
             <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-cognitive-primary to-cognitive-secondary flex items-center justify-center font-bold text-white text-sm shadow-md shadow-cognitive-primary/20 flex-shrink-0">
               {user?.name?.charAt(0) || 'U'}
             </div>
@@ -139,12 +138,11 @@ const Sidebar = ({ isOpen, onClose }) => {
             </div>
           </div>
 
-          {/* Logout */}
           <button
             onClick={handleLogout}
             className="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-xs font-semibold transition-all duration-200 bg-rose-500/5 hover:bg-rose-500/10 dark:hover:bg-rose-500/15 border border-rose-500/15 hover:border-rose-500/25 text-rose-600 dark:text-rose-400 hover:-translate-y-0.5 active:translate-y-0 active:scale-[0.98] group"
           >
-            <LogOut className="w-3.5 h-3.5" />
+            <LogOut className="w-4 h-4" />
             {getTranslation('signOut')}
           </button>
         </div>

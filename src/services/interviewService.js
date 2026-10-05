@@ -265,6 +265,21 @@ const interviewService = {
   simulateNexusFinetuning: async () => {
     const response = await api.post('/nexus/fine-tune/simulate');
     return response.data;
+  },
+
+  teachAI: async (question, answer) => {
+    const response = await api.post('/nexus/learn', { question, answer });
+    return response.data;
+  },
+
+  getTaughtRules: async () => {
+    const response = await api.get('/nexus/learn');
+    return response.data;
+  },
+
+  deleteTaughtRule: async (id) => {
+    const response = await api.delete(`/nexus/learn/${id}`);
+    return response.data;
   }
 };
 

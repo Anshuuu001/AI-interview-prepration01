@@ -88,6 +88,67 @@
   --banner-subtext:#475569;
 }
 
+/* ════════════════════════════════════════
+   DARK THEME — Cyberpunk Space Indigo
+   ════════════════════════════════════════ */
+.dark {
+  /* Accent Colors - Dark Mode */
+  --primary: #6366f1; /* Indigo 500 */
+  --primary-container: #1e1b4b; /* Indigo 900 */
+  --on-primary-container: #c7d2fe; /* Indigo 200 */
+  --secondary: #38bdf8; /* Sky 400 */
+  --secondary-container: #0c4a6e; /* Sky 900 */
+  --on-secondary-container: #bae6fd; /* Sky 200 */
+  --surface: #0f172a;
+  --surface-dim: #020617;
+  --on-surface: #f8fafc;
+  --on-surface-variant: #94a3b8;
+  --outline: #334155;
+  --outline-variant: #1e293b;
+
+  /* Semantic Structure - Liquid Glassmorphism Dark */
+  --app-bg:        linear-gradient(-45deg, #020617, #0f172a, #111827, #020617);
+  --app-bg-color:  #020617;
+  
+  --sidebar-bg:    rgba(15, 23, 42, 0.6);
+  --sidebar-border: rgba(255, 255, 255, 0.05);
+  
+  --navbar-bg:     rgba(15, 23, 42, 0.65);
+  --navbar-border: rgba(255, 255, 255, 0.05);
+  
+  --card-bg:       rgba(30, 41, 59, 0.35);
+  --card-border:   rgba(255, 255, 255, 0.05);
+  --card-shadow:   0 8px 32px 0 rgba(0, 0, 0, 0.37), inset 0 1px 1px rgba(255, 255, 255, 0.05);
+  
+  --glass-bg:      rgba(15, 23, 42, 0.45);
+  --glass-border:  rgba(255, 255, 255, 0.05);
+  --glass-shadow:  0 8px 32px 0 rgba(0, 0, 0, 0.37), inset 0 1px 1px rgba(255, 255, 255, 0.05);
+  
+  /* Dark Theme Orbs */
+  --orb-1: rgba(99, 102, 241, 0.1);
+  --orb-2: rgba(14, 165, 233, 0.1);
+  --orb-3: rgba(236, 72, 153, 0.07);
+  --grid-color: rgba(255, 255, 255, 0.02);
+  
+  --bubble-ai-bg:  rgba(30, 41, 59, 0.6);
+  --bubble-ai-border: rgba(255, 255, 255, 0.05);
+  --bubble-ai-text: #f8fafc;
+  
+  --input-bg:      rgba(15, 23, 42, 0.6);
+  --input-text:    #f8fafc;
+  --quick-btn-bg:  rgba(30, 41, 59, 0.5);
+  
+  --scrollbar-track: rgba(15, 23, 42, 0.3);
+  --scrollbar-thumb: rgba(255, 255, 255, 0.1);
+  --link-color:    #818cf8;
+  --metric-num-shadow: 0 0 12px rgba(99, 102, 241, 0.4);
+  
+  --banner-bg:     rgba(15, 23, 42, 0.6);
+  --banner-border: rgba(255, 255, 255, 0.05);
+  --banner-text:   #f8fafc;
+  --banner-subtext:#94a3b8;
+}
+
 /* AI Glow Metrics Button */
 .ai-button {
   background: linear-gradient(90deg, var(--primary), var(--secondary));
@@ -587,69 +648,69 @@ input:focus, textarea:focus, select:focus { outline: none; box-shadow: 0 0 0 2px
    LIGHT THEME CONTRAST & LEGIBILITY UTILITIES
    ════════════════════════════════════════ */
 /* Ensure text helper utilities are high-contrast dark in light theme */
-.text-slate-100 {
+:not(.dark) .text-slate-100 {
   color: rgb(15, 23, 42) !important;
 }
-.text-slate-200 {
+:not(.dark) .text-slate-200 {
   color: rgb(30, 41, 59) !important;
 }
-.text-slate-300 {
+:not(.dark) .text-slate-300 {
   color: rgb(51, 65, 85) !important;
 }
-.text-slate-400 {
+:not(.dark) .text-slate-400 {
   color: rgb(71, 85, 105) !important;
 }
-.text-slate-500 {
+:not(.dark) .text-slate-500 {
   color: rgb(100, 116, 139) !important;
 }
 
 /* Hover and active text state overrides */
-.hover\:text-slate-100:hover {
+:not(.dark) .hover\:text-slate-100:hover {
   color: rgb(15, 23, 42) !important;
 }
-.hover\:text-slate-200:hover {
+:not(.dark) .hover\:text-slate-200:hover {
   color: rgb(30, 41, 59) !important;
 }
-.hover\:text-slate-300:hover {
+:not(.dark) .hover\:text-slate-300:hover {
   color: rgb(51, 65, 85) !important;
 }
-.hover\:text-slate-400:hover {
+:not(.dark) .hover\:text-slate-400:hover {
   color: rgb(71, 85, 105) !important;
 }
 
 /* Group hover text overrides */
-.group:hover .group-hover\:text-slate-100 {
+:not(.dark) .group:hover .group-hover\:text-slate-100 {
   color: rgb(15, 23, 42) !important;
 }
-.group:hover .group-hover\:text-slate-200 {
+:not(.dark) .group:hover .group-hover\:text-slate-200 {
   color: rgb(30, 41, 59) !important;
 }
-.group:hover .group-hover\:text-slate-300 {
+:not(.dark) .group:hover .group-hover\:text-slate-300 {
   color: rgb(51, 65, 85) !important;
 }
-.group:hover .group-hover\:text-slate-400 {
+:not(.dark) .group:hover .group-hover\:text-slate-400 {
   color: rgb(71, 85, 105) !important;
 }
-.group:hover .group-hover\:text-white {
+:not(.dark) .group:hover .group-hover\:text-white {
   color: rgb(15, 23, 42) !important;
 }
 
 /* Force dark header text inside light layout panels */
-.glass-panel h1,
-.glass-panel h2,
-.glass-panel h3,
-.glass-panel h4,
-.glass-panel .text-slate-100,
-.glass-panel .text-slate-200 {
+:not(.dark) .glass-panel h1,
+:not(.dark) .glass-panel h2,
+:not(.dark) .glass-panel h3,
+:not(.dark) .glass-panel h4,
+:not(.dark) .glass-panel .text-slate-100,
+:not(.dark) .glass-panel .text-slate-200 {
   color: rgb(15, 23, 42) !important;
 }
 
-.liquid-glass-card h1,
-.liquid-glass-card h2,
-.liquid-glass-card h3,
-.liquid-glass-card h4,
-.liquid-glass-card .text-slate-100,
-.liquid-glass-card .text-slate-200 {
+:not(.dark) .liquid-glass-card h1,
+:not(.dark) .liquid-glass-card h2,
+:not(.dark) .liquid-glass-card h3,
+:not(.dark) .liquid-glass-card h4,
+:not(.dark) .liquid-glass-card .text-slate-100,
+:not(.dark) .liquid-glass-card .text-slate-200 {
   color: rgb(15, 23, 42) !important;
 }
 

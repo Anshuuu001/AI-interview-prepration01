@@ -26,4 +26,7 @@ dist-ssr
 *.ntvs*
 *.njsproj
 *.sln
-*.sw?
+# Build and scratch files
+target/
+*.class
+backend/scratch/

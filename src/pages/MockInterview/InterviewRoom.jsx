@@ -32,6 +32,7 @@ import {
 } from 'lucide-react';
 import { formatDuration } from '../../utils/formatters';
 import { getTranslation } from '../../utils/translations';
+import { askGemini } from '../../services/geminiService';
 
 const InterviewRoom = () => {
   const { id } = useParams();
@@ -87,6 +88,9 @@ const InterviewRoom = () => {
     typedAnswerRef.current = typedAnswer;
   }, [typedAnswer]);
 
+  const faceCountRef = useRef(0);
+  const streamRef = useRef(null);
+
   // Advanced Anti-Cheat
   const { warningCount, showWarning, warningMessage, isBlurred, isOnline, dismiss, triggerWarning } = useAntiCheat({
     active: verified && !!template && !submitting,
@@ -111,6 +115,10 @@ const InterviewRoom = () => {
 
   // Multi-Face Detection
   const { faceCount, modelLoaded, getPresenceScore, checkLighting, simulateFaceMatch } = useFaceDetection(videoRef, !!stream);
+
+  useEffect(() => {
+    faceCountRef.current = faceCount;
+  }, [faceCount]);
   
   // Microphone RMS analyser in lobby
   useEffect(() => {
@@ -372,6 +380,7 @@ const InterviewRoom = () => {
     try {
       const mediaStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: false });
       setStream(mediaStream);
+      streamRef.current = mediaStream;
       setCameraError('');
       if (videoRef.current) {
         videoRef.current.srcObject = mediaStream;
@@ -382,10 +391,18 @@ const InterviewRoom = () => {
     }
   };
 
+  // Synchronize stream with video DOM element whenever stream or view (lobby vs room) changes
+  useEffect(() => {
+    if (videoRef.current && stream) {
+      videoRef.current.srcObject = stream;
+    }
+  }, [stream, verified]);
+
   const toggleCamera = () => {
     if (stream) {
       stream.getTracks().forEach(track => track.stop());
       setStream(null);
+      streamRef.current = null;
       if (videoRef.current) {
         videoRef.current.srcObject = null;
       }
@@ -423,7 +440,44 @@ const InterviewRoom = () => {
           navigate('/interview');
           return;
         }
-        setTemplate(found);
+
+        // Deep copy template to avoid mutating cached templates
+        const templateCopy = JSON.parse(JSON.stringify(found));
+
+        // Dynamic Question Translation for Multilingual candidates
+        const activeLang = localStorage.getItem('language') || 'english';
+        if (activeLang !== 'english') {
+          try {
+            const questionTexts = templateCopy.questions.map(q => q.text);
+            const targetLangLabel = activeLang === 'hindi' ? 'Hindi (हिंदी)' : 'Marathi (मराठी)';
+            const prompt = `Translate the following interview questions into ${targetLangLabel}. Return ONLY a JSON array of translated strings in the exact same order. Do not include any markdown formatting, thoughts, explanations, or code block markers (like \`\`\`json). Just the raw JSON array.
+Questions: ${JSON.stringify(questionTexts)}`;
+            
+            const translatedText = await askGemini(prompt, 'You are a professional translator. Return ONLY a valid JSON array of strings.');
+            let translatedArray = null;
+            try {
+              const cleanedText = translatedText.replace(/```json/g, '').replace(/```/g, '').trim();
+              translatedArray = JSON.parse(cleanedText);
+            } catch (e) {
+              console.warn("Failed to parse translated questions JSON, trying fallback regex", e);
+              const match = translatedText.match(/\[\s*".*"\s*\]/s);
+              if (match) {
+                translatedArray = JSON.parse(match[0]);
+              }
+            }
+
+            if (translatedArray && Array.isArray(translatedArray) && translatedArray.length === templateCopy.questions.length) {
+              templateCopy.questions = templateCopy.questions.map((q, idx) => ({
+                ...q,
+                text: translatedArray[idx]
+              }));
+            }
+          } catch (transErr) {
+            console.error("Failed to translate interview questions:", transErr);
+          }
+        }
+
+        setTemplate(templateCopy);
         
         if (found.isVideo) {
           startCamera();
@@ -445,7 +499,7 @@ const InterviewRoom = () => {
       recognition.lang = 'en-US';
       
       recognition.onresult = (event) => {
-        if (faceCount > 1) return; // Prevent input if paused
+        if (faceCountRef.current > 1) return; // Prevent input if paused
         let finalTranscript = '';
         for (let i = event.resultIndex; i < event.results.length; ++i) {
           if (event.results[i].isFinal) {
@@ -475,16 +529,41 @@ const InterviewRoom = () => {
       }
       if (speechRecognitionRef.current) speechRecognitionRef.current.stop();
       window.speechSynthesis.cancel();
-      if (stream) {
-        stream.getTracks().forEach(track => track.stop());
+      if (streamRef.current) {
+        streamRef.current.getTracks().forEach(track => track.stop());
       }
     };
-  }, [id, navigate, currentIdx]);
+  }, [id, navigate]);
 
   const speakQuestion = (text) => {
     window.speechSynthesis.cancel();
     const utterance = new SpeechSynthesisUtterance(text);
     utterance.rate = 0.95;
+
+    const activeLang = localStorage.getItem('language') || 'english';
+    if (activeLang === 'hindi') {
+      utterance.lang = 'hi-IN';
+    } else if (activeLang === 'marathi') {
+      utterance.lang = 'mr-IN';
+    } else {
+      utterance.lang = 'en-US';
+    }
+
+    if (window.speechSynthesis) {
+      const voices = window.speechSynthesis.getVoices();
+      let matchedVoice = null;
+      if (activeLang === 'hindi') {
+        matchedVoice = voices.find(v => v.lang.startsWith('hi'));
+      } else if (activeLang === 'marathi') {
+        matchedVoice = voices.find(v => v.lang.startsWith('mr'));
+      } else {
+        matchedVoice = voices.find(v => v.lang.startsWith('en'));
+      }
+      if (matchedVoice) {
+        utterance.voice = matchedVoice;
+      }
+    }
+
     window.speechSynthesis.speak(utterance);
   };
 
@@ -553,10 +632,14 @@ const InterviewRoom = () => {
     setFillerCount(0);
     setWpm(0);
     
-    if (timerRef.current) clearInterval(timerRef.current);
+    if (timerRef.current) {
+      clearInterval(timerRef.current);
+      timerRef.current = null;
+    }
     
     // Check if last question
     if (currentIdx < template.questions.length - 1) {
+      setSeconds(120);
       setCurrentIdx(currentIdx + 1);
     } else {
       handleSubmitInterview(newPairs);
@@ -568,7 +651,10 @@ const InterviewRoom = () => {
     submitStartedRef.current = true;
     setSubmitting(true);
     window.speechSynthesis.cancel();
-    if (timerRef.current) clearInterval(timerRef.current);
+    if (timerRef.current) {
+      clearInterval(timerRef.current);
+      timerRef.current = null;
+    }
     
     try {
       const score = getPresenceScore();
@@ -765,7 +851,7 @@ const InterviewRoom = () => {
   const currentQuestionObj = template.questions[currentIdx];
 
   return (
-    <div className="max-w-7xl mx-auto h-[calc(100vh-120px)] flex flex-col gap-6 animate-fade-in-up" style={{ userSelect: 'none' }}>
+    <div className="max-w-7xl mx-auto min-h-[calc(100vh-180px)] flex flex-col gap-5 animate-fade-in-up" style={{ userSelect: 'none' }}>
       {/* Anti-cheat violation overlay */}
       <AntiCheatOverlay
         show={showWarning}
@@ -800,7 +886,7 @@ const InterviewRoom = () => {
       {/* HUD Header Bar */}
       <div className="flex-shrink-0 flex flex-col md:flex-row md:items-center justify-between gap-4 glass-panel px-6 py-4 rounded-2xl border border-slate-200/50 dark:border-white/10 shadow-lg">
         <div>
-          <h2 className="text-3xl font-display font-black bg-clip-text text-transparent bg-gradient-to-r from-cognitive-primary to-cognitive-secondary tracking-tight">
+          <h2 className="text-2xl sm:text-3xl font-display font-black bg-clip-text text-transparent bg-gradient-to-r from-cognitive-primary to-cognitive-secondary tracking-tight">
             {template.title}
           </h2>
           <div className="flex items-center gap-2 mt-1">
@@ -811,15 +897,15 @@ const InterviewRoom = () => {
           </div>
         </div>
 
-        <div className="flex items-center gap-4 flex-wrap">
+        <div className="flex items-center gap-3 flex-wrap">
           {/* Proctoring HUD Panel */}
-          <div className={`flex items-center gap-3 bg-slate-900/5 dark:bg-black/20 border px-5 py-2.5 rounded-xl text-xs font-bold shadow-inner ${
+          <div className={`flex items-center gap-3 bg-slate-900/5 dark:bg-black/20 border px-4 py-2 rounded-xl text-xs font-bold shadow-inner ${
             cheatingRisk === 'Critical' || cheatingRisk === 'High'
               ? 'border-rose-500/30 text-rose-500'
               : 'border-slate-200/50 dark:border-white/5 text-slate-600 dark:text-slate-300'
           }`}>
             <AlertTriangle className="w-4 h-4 text-rose-500" />
-            <div className="flex gap-4">
+            <div className="flex gap-3">
               <span>Integrity: <span className="text-emerald-500">{integrityScore}%</span></span>
               <span className="w-px h-4 bg-slate-300 dark:bg-slate-700" />
               <span>Risk: <span className={cheatingRisk === 'Critical' || cheatingRisk === 'High' ? "text-rose-500 animate-pulse font-black" : "text-emerald-500"}>{cheatingRisk}</span></span>
@@ -828,16 +914,16 @@ const InterviewRoom = () => {
             </div>
           </div>
 
-          <div className="flex items-center gap-3 bg-slate-900/5 dark:bg-black/20 border border-slate-200/50 dark:border-white/5 px-5 py-2.5 rounded-xl text-slate-600 dark:text-slate-300 text-xs font-bold shadow-inner">
+          <div className="flex items-center gap-3 bg-slate-900/5 dark:bg-black/20 border border-slate-200/50 dark:border-white/5 px-4 py-2 rounded-xl text-slate-600 dark:text-slate-300 text-xs font-bold shadow-inner">
             <Activity className="w-4 h-4 text-cognitive-secondary" />
-            <div className="flex gap-4">
+            <div className="flex gap-3">
               <span>{getTranslation('fillers')}: <span className={fillerCount > 3 ? "text-rose-500" : "text-emerald-500"}>{fillerCount}</span></span>
               <span className="w-px h-4 bg-slate-300 dark:bg-slate-700" />
               <span>{getTranslation('wpmLabel')}: <span className="text-cognitive-primary">{wpm}</span></span>
             </div>
           </div>
           
-          <div className={`flex items-center gap-3 border px-5 py-2.5 rounded-xl text-sm font-black shadow-inner transition-colors duration-300 ${
+          <div className={`flex items-center gap-2 border px-4 py-2 rounded-xl text-sm font-black shadow-inner transition-colors duration-300 ${
             seconds <= 30 
               ? 'bg-rose-500/10 border-rose-500/50 text-rose-600 dark:text-rose-400 animate-pulse' 
               : 'bg-cognitive-primary/5 border-cognitive-primary/30 text-cognitive-primary'
@@ -848,17 +934,17 @@ const InterviewRoom = () => {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 flex-1 min-h-0">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 items-start">
         
         {/* Left pane: Proctoring feed (Col Span 4) - only shown for Video Interviews */}
         {template?.isVideo && (
-          <div className="lg:col-span-4 flex flex-col gap-4 min-h-0">
-            <Card className="liquid-glass-card flex-1 flex flex-col p-4 sm:p-6 overflow-hidden relative shadow-2xl min-h-[400px]">
+          <div className="lg:col-span-4 flex flex-col gap-4">
+            <Card className="liquid-glass-card flex flex-col p-5 overflow-hidden relative shadow-xl">
               {/* Background Ambient Glow */}
               <div className="absolute top-0 inset-x-0 h-40 bg-gradient-to-b from-cognitive-primary/20 to-transparent blur-2xl pointer-events-none opacity-60" />
 
-              <div className="flex-1 flex flex-col min-h-0 relative z-10">
-                <div className="flex items-center justify-between mb-4 flex-shrink-0">
+              <div className="flex flex-col relative z-10 space-y-3">
+                <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
                     <Camera className="w-4 h-4 text-emerald-500" />
                     <span className="text-xs font-display font-bold text-slate-500 uppercase tracking-[0.15em]">
@@ -878,12 +964,20 @@ const InterviewRoom = () => {
                   </button>
                 </div>
                 
-                <div className="flex-1 relative w-full rounded-xl overflow-hidden bg-slate-100 dark:bg-slate-900/80 border border-slate-200 dark:border-slate-800 shadow-inner flex items-center justify-center group min-h-[200px]">
+                <div className="relative w-full aspect-[4/3] rounded-xl overflow-hidden bg-slate-900 border border-slate-200/50 dark:border-slate-800 shadow-inner flex items-center justify-center group">
                   {cameraError ? (
                     <div className="text-center p-4">
                       <CameraOff className="w-8 h-8 text-rose-500 mx-auto mb-2 opacity-50" />
                       <p className="text-xs font-bold text-rose-500">{cameraError}</p>
                       <p className="text-[10px] text-slate-500 mt-1">{getTranslation('allowCameraPermissions')}</p>
+                    </div>
+                  ) : !stream ? (
+                    <div className="text-center p-4">
+                      <CameraOff className="w-8 h-8 text-slate-500 mx-auto mb-2 opacity-50" />
+                      <p className="text-xs font-bold text-slate-400">Camera Feed Off</p>
+                      <button onClick={startCamera} className="mt-2 px-3 py-1 bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 rounded-lg text-xs font-bold hover:bg-emerald-500/30 transition-all">
+                        Start Camera
+                      </button>
                     </div>
                   ) : (
                     <>
@@ -924,24 +1018,24 @@ const InterviewRoom = () => {
         )}
 
         {/* Right pane: Action Center (Col Span 8 or 12 depending on isVideo) */}
-        <div className={`${template?.isVideo ? 'lg:col-span-8' : 'lg:col-span-12 max-w-5xl mx-auto w-full'} flex flex-col gap-6 min-h-0`}>
+        <div className={`${template?.isVideo ? 'lg:col-span-8' : 'lg:col-span-12 max-w-5xl mx-auto w-full'} flex flex-col gap-5`}>
           
-          <Card className="liquid-glass-card flex-1 flex flex-col relative z-10 overflow-hidden min-h-0 p-8 shadow-2xl">
+          <Card className="liquid-glass-card flex flex-col relative z-10 overflow-hidden p-6 sm:p-7 shadow-xl space-y-5">
             {/* Question Section */}
-            <div className="space-y-4 flex-shrink-0 mb-6">
+            <div className="space-y-3">
               <div className="flex items-center justify-between">
-                <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-cognitive-primary/10 border border-cognitive-primary/20 text-xs font-display font-black text-cognitive-primary uppercase tracking-widest">
+                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-lg bg-cognitive-primary/10 border border-cognitive-primary/20 text-xs font-display font-black text-cognitive-primary uppercase tracking-widest">
                   <Sparkles className="w-4 h-4" />
                   {getTranslation('promptLabel')} {currentIdx + 1}
                 </div>
               </div>
-              <h3 className="text-xl sm:text-2xl font-black text-slate-800 dark:text-slate-100 leading-relaxed overflow-y-auto max-h-[25vh] custom-scrollbar pr-4">
+              <h3 className="text-xl sm:text-2xl font-black text-slate-800 dark:text-slate-100 leading-relaxed max-h-[25vh] overflow-y-auto custom-scrollbar pr-2">
                 {currentQuestionObj.text}
               </h3>
             </div>
 
             {/* Answer Interface */}
-            <div className="flex-1 flex flex-col min-h-0 gap-4 bg-slate-50/50 dark:bg-slate-900/40 rounded-2xl border border-slate-200/80 dark:border-white/5 p-4 sm:p-6 shadow-inner">
+            <div className="flex flex-col gap-3 bg-slate-50/60 dark:bg-slate-900/40 rounded-2xl border border-slate-200/80 dark:border-white/5 p-4 sm:p-5 shadow-inner">
               <div className="flex justify-between items-center flex-shrink-0">
                 <label className="flex items-center gap-2 text-xs font-display font-black text-slate-500 uppercase tracking-widest">
                   <Radio className="w-3.5 h-3.5 text-cognitive-secondary" />
@@ -982,21 +1076,21 @@ const InterviewRoom = () => {
                 </div>
               </div>
               
-              <div className="flex-1 min-h-0 flex flex-col rounded-xl overflow-hidden shadow-sm border border-slate-200 dark:border-slate-800">
+              <div className="rounded-xl overflow-hidden shadow-sm border border-slate-200 dark:border-slate-800">
                 <textarea
                   value={typedAnswer}
                   onChange={(e) => setTypedAnswer(e.target.value)}
                   onPaste={(e) => e.preventDefault()}
-                  placeholder={answerMode === 'text' ? 'Type your answer here... Structure your response clearly with examples.' : getTranslation('responsePlaceholder')}
-                  className="flex-1 w-full p-6 bg-white/70 dark:bg-[#0a0a0f]/80 text-slate-800 dark:text-slate-200 text-base leading-relaxed transition-all focus:outline-none resize-none custom-scrollbar backdrop-blur-sm"
+                  placeholder={answerMode === 'text' ? 'Type your answer here... Structure your response clearly with examples.' : 'Click "Start Microphone" to speak your answer or type directly...'}
+                  rows={6}
+                  className="w-full p-4 bg-white/70 dark:bg-[#0a0a0f]/80 text-slate-800 dark:text-slate-200 text-base leading-relaxed transition-all focus:outline-none resize-none custom-scrollbar backdrop-blur-sm"
                   style={{ userSelect: 'text' }}
-                  readOnly={answerMode === 'voice'}
                 />
               </div>
             </div>
 
             {/* Bottom Action Bar */}
-            <div className="flex items-center justify-between pt-6 mt-auto flex-shrink-0">
+            <div className="flex items-center justify-between pt-3">
               {answerMode === 'voice' ? (
                 <Button
                   onClick={handleToggleRecord}

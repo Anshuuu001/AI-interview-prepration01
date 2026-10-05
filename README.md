@@ -1,6 +1,6 @@
-# React + Vite
+# AI-interview-prepration01
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+ElevateAI - Comprehensive AI-Powered Mock Interview & Career Preparation Platform.
 
 Currently, two official plugins are available:
 

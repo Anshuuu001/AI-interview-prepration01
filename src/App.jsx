@@ -126,10 +126,6 @@ const DashboardLayout = () => {
 };
 
 const App = () => {
-  useEffect(() => {
-    document.documentElement.classList.remove('dark');
-    localStorage.setItem('theme', 'light');
-  }, []);
 
   return (
     <BrowserRouter>

@@ -8,7 +8,7 @@ const LandingPage = () => {
   const { user } = useAuth();
 
   return (
-    <div className="min-h-screen bg-gray-50 relative overflow-hidden">
+    <div className="min-h-screen bg-gray-50 dark:bg-slate-950 text-gray-900 dark:text-slate-100 relative overflow-hidden transition-colors duration-300">
       
       {/* Navigation */}
       <nav className="relative z-10 w-full max-w-7xl mx-auto px-6 py-6 flex justify-between items-center">
@@ -16,7 +16,7 @@ const LandingPage = () => {
           <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center shadow-lg shadow-indigo-500/30">
             <Zap className="w-5 h-5 text-white" />
           </div>
-          <span className="text-xl font-bold text-gray-800 tracking-tight">ElevateAI</span>
+          <span className="text-xl font-bold text-gray-800 dark:text-white tracking-tight">ElevateAI</span>
         </div>
         
         <div className="flex items-center gap-4">
