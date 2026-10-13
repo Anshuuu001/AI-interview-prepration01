@@ -175,30 +175,30 @@ const AptitudeTest = () => {
         {/* Test top bar */}
         <div className="flex items-center justify-between">
           <div>
-            <h3 className="text-sm font-bold text-slate-400 uppercase tracking-widest flex items-center gap-1.5">
-              <span className="w-2.5 h-2.5 rounded-full bg-primary-500 animate-pulse" />
+            <h3 className="text-xs font-semibold text-[#666675] uppercase tracking-wider flex items-center gap-1.5">
+              <span className="w-2 h-2 rounded-full bg-[#E97878] animate-pulse" />
               {selectedCategory === 'All' ? getTranslation('allLabel') : selectedCategory} {getTranslation('aptitudeQuiz')}
             </h3>
-            <p className="text-xs text-slate-500 mt-1">
+            <p className="text-xs text-[#666675] mt-1">
               {getTranslation('questionLabel')} {activeIdx + 1} {getTranslation('ofLabel')} {testQuestions.length} ({answeredCount} {getTranslation('answeredLabel')})
             </p>
           </div>
 
-          {/* Glowing Timer */}
-          <div className={`flex items-center gap-2 px-4 py-2 rounded-2xl text-xs font-black border transition-all shadow-md ${
+          {/* Clean Timer */}
+          <div className={`flex items-center gap-2 px-3.5 py-1.5 rounded-xl text-xs font-semibold border transition-all ${
             timeRemaining < 60
-              ? 'bg-rose-500/10 border-rose-500/30 text-rose-600 dark:text-rose-400 animate-pulse'
-              : 'bg-slate-900/5 dark:bg-slate-900/60 border-slate-200 dark:border-slate-800 text-slate-500 dark:text-slate-200'
+              ? 'bg-[#C44848]/10 border-[#C44848]/30 text-[#C44848] animate-pulse'
+              : 'bg-[#DFE8F7] border-[#DFE8F7] text-[#10194A]'
           }`}>
-            <Clock className="w-4 h-4 text-indigo-400" />
+            <Clock className="w-3.5 h-3.5 text-[#10194A]" />
             <span>{getTranslation('timeLeft')}: {formatDuration(timeRemaining)}</span>
           </div>
         </div>
 
         {/* Question Panel */}
-        <Card className="min-h-[300px] flex flex-col justify-between border border-slate-200/50 dark:border-slate-800/80">
+        <Card className="min-h-[300px] flex flex-col justify-between border border-[#E7E2DC] bg-white rounded-2xl shadow-sm p-6 sm:p-8">
           <div className="space-y-6">
-            <h4 className="text-base sm:text-lg font-bold text-slate-100 leading-relaxed">
+            <h4 className="text-base sm:text-lg font-medium text-[#10194A] leading-relaxed">
               {currentQ.question}
             </h4>
 
@@ -211,15 +211,15 @@ const AptitudeTest = () => {
                     key={oIdx}
                     type="button"
                     onClick={() => handleSelectOption(oIdx)}
-                    className={`text-left w-full px-5 py-3.5 rounded-2xl border text-sm transition-all flex items-center justify-between choice-3d-card ${
+                    className={`text-left w-full px-5 py-3.5 rounded-xl border text-sm transition-all flex items-center justify-between ${
                       isSelected
-                        ? 'bg-primary-600/15 border-primary-500 text-primary-700 dark:text-primary-300 shadow-md shadow-primary-500/10 translate-y-[-2px]'
-                        : 'bg-slate-900/5 dark:bg-slate-900/40 border-slate-200 dark:border-slate-800 hover:bg-slate-900/10 dark:hover:bg-slate-900/70 text-slate-500 dark:text-slate-200 hover:text-slate-700 dark:hover:text-slate-100'
+                        ? 'bg-[#FAF5EF] border-[#10194A] text-[#10194A] shadow-xs'
+                        : 'bg-white border-[#E7E2DC] hover:border-[#10194A]/30 text-[#22243A] hover:bg-[#FAF5EF]/50'
                     }`}
                   >
-                    <span className="font-semibold">{opt}</span>
-                    <span className={`w-6 h-6 rounded-full border flex items-center justify-center text-xs font-bold flex-shrink-0 transition-all ${
-                      isSelected ? 'border-primary-400 bg-primary-500 text-white' : 'border-slate-200 dark:border-slate-850 bg-white dark:bg-slate-950 text-slate-500'
+                    <span className="font-medium">{opt}</span>
+                    <span className={`w-6 h-6 rounded-lg border flex items-center justify-center text-xs font-semibold flex-shrink-0 transition-all ${
+                      isSelected ? 'border-[#E97878] bg-[#E97878] text-white' : 'border-[#E7E2DC] bg-[#FAF5EF] text-[#666675]'
                     }`}>
                       {String.fromCharCode(65 + oIdx)}
                     </span>
@@ -230,7 +230,7 @@ const AptitudeTest = () => {
           </div>
 
           {/* Navigation controls */}
-          <div className="flex items-center justify-between pt-6 border-t border-slate-200/40 dark:border-slate-850 mt-8">
+          <div className="flex items-center justify-between pt-6 border-t border-[#E7E2DC] mt-8">
             <Button
               onClick={handlePrev}
               disabled={activeIdx === 0}
@@ -246,7 +246,7 @@ const AptitudeTest = () => {
                 onClick={submitAnswers}
                 variant="primary"
                 icon={Check}
-                className="shadow-lg shadow-primary-600/20"
+                className="shadow-sm"
               >
                 {getTranslation('submitTest')}
               </Button>
@@ -269,11 +269,11 @@ const AptitudeTest = () => {
   return (
     <div className="max-w-4xl mx-auto space-y-6 animate-fade-in-up">
       <div>
-        <h2 className="text-3xl font-extrabold text-slate-100 flex items-center gap-2.5">
-          <ClipboardList className="w-8 h-8 text-primary-400" />
+        <h2 className="font-serif text-3xl font-normal text-[#10194A] flex items-center gap-3">
+          <ClipboardList className="w-8 h-8 text-[#EBA66F]" />
           {getTranslation('aptitudeArenaTitle')}
         </h2>
-        <p className="text-xs sm:text-sm text-slate-400 mt-1">
+        <p className="font-sans text-sm text-[#666675] mt-1">
           {getTranslation('aptitudeArenaDescription')}
         </p>
       </div>
@@ -282,11 +282,11 @@ const AptitudeTest = () => {
       <Card
         title={getTranslation('startAptitudeChallenge')}
         subtitle={getTranslation('aptitudeChallengeDescription')}
-        className="border border-slate-200/50 dark:border-slate-800/80"
+        className="border border-[#E7E2DC] bg-white rounded-2xl shadow-sm p-6 sm:p-8"
       >
         <div className="space-y-6">
           <div>
-            <label className="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-3">
+            <label className="block text-xs font-semibold text-[#666675] uppercase tracking-wider mb-3">
               {getTranslation('chooseTestCategory')}
             </label>
             <div className="flex flex-wrap gap-2.5">
@@ -294,10 +294,10 @@ const AptitudeTest = () => {
                 <button
                   key={cat}
                   onClick={() => setSelectedCategory(cat)}
-                  className={`px-4 py-2 rounded-xl text-xs font-bold border transition-all ${
+                  className={`px-4 py-2 rounded-xl text-xs font-medium border transition-all ${
                     selectedCategory === cat
-                      ? 'bg-primary-600/20 border-primary-500 text-primary-700 dark:text-primary-300 shadow-md shadow-primary-500/5 scale-[1.03]'
-                      : 'bg-slate-900/5 dark:bg-slate-900/40 border-slate-200 dark:border-slate-700 text-slate-500 dark:text-slate-400 hover:border-primary-400/50 hover:text-slate-700 dark:hover:text-slate-200'
+                      ? 'bg-[#10194A] border-[#10194A] text-white shadow-xs'
+                      : 'bg-[#FAF5EF] border-[#E7E2DC] text-[#22243A] hover:border-[#10194A]/40'
                   }`}
                 >
                   {cat === 'All' ? getTranslation('allLabel') : cat}
@@ -306,20 +306,20 @@ const AptitudeTest = () => {
             </div>
           </div>
 
-          <div className="p-4 rounded-2xl bg-indigo-500/5 border border-indigo-500/10 text-xs text-slate-500 dark:text-slate-400 flex gap-2.5">
-            <BookOpen className="w-5 h-5 text-indigo-500 dark:text-indigo-400 flex-shrink-0 mt-0.5" />
+          <div className="p-4 rounded-xl bg-[#DFE8F7]/40 border border-[#DFE8F7] text-xs text-[#22243A] flex gap-3">
+            <BookOpen className="w-5 h-5 text-[#10194A] flex-shrink-0 mt-0.5" />
             <div>
-              <span className="font-bold text-slate-700 dark:text-slate-200 block mb-0.5">{getTranslation('rulesAndSetup')}</span>
+              <span className="font-semibold text-[#10194A] block mb-0.5">{getTranslation('rulesAndSetup')}</span>
               {getTranslation('aptitudeRulesDescription')}
             </div>
           </div>
 
-          <div className="pt-4 border-t border-slate-200/40 dark:border-slate-850 flex justify-end">
+          <div className="pt-4 border-t border-[#E7E2DC] flex justify-end">
             <Button
               onClick={handleStartTest}
               icon={RefreshCw}
               variant="primary"
-              className="shadow-lg shadow-primary-600/20 rounded-xl"
+              className="shadow-sm rounded-xl"
             >
               {getTranslation('beginQuiz')}
             </Button>

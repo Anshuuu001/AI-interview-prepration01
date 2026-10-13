@@ -37,8 +37,8 @@ const EditProfile = () => {
     <div className="max-w-2xl mx-auto space-y-6 animate-fade-in-up">
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-2xl font-bold text-slate-100">{getTranslation('editProfile')}</h2>
-          <p className="text-xs text-slate-400">{getTranslation('editProfileDescription')}</p>
+          <h2 className="text-2xl font-bold text-slate-100 font-editorial">VEYRA Career Profile</h2>
+          <p className="text-xs text-slate-400">Manage your candidate identity, target role, and technical skills for VEYRA AI.</p>
         </div>
       </div>
 

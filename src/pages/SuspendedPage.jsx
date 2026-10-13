@@ -48,7 +48,7 @@ const SuspendedPage = () => {
         <h1 className="text-2xl font-bold text-white mb-3">Account Temporarily Suspended</h1>
         
         <p className="text-slate-400 text-sm mb-6">
-          Your access to the ElevateAI platform has been temporarily blocked due to repeated proctoring violations during your interview session.
+          Your access to the VEYRA AI platform has been temporarily blocked due to repeated proctoring violations during your interview session.
         </p>
 
         <div className="bg-slate-900/50 border border-slate-800 rounded-xl p-4 mb-8 flex items-center justify-center gap-3">

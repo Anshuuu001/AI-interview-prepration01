@@ -17,11 +17,11 @@ const ExportSharing = () => {
     const text = content || 'No content to export. Paste your chat or notes here first.';
     let output = text;
     if (format.id === 'html') output = `<!DOCTYPE html><html><head><title>Export</title><style>body{font-family:sans-serif;padding:2rem;background:#0f172a;color:#e2e8f0;}</style></head><body><pre>${text}</pre></body></html>`;
-    if (format.id === 'json') output = JSON.stringify({ content: text, exported_at: new Date().toISOString(), source: 'ElevateAI' }, null, 2);
-    if (format.id === 'markdown') output = `# ElevateAI Export\n\n${text}\n\n---\n*Exported on ${new Date().toLocaleString()}*`;
+    if (format.id === 'json') output = JSON.stringify({ content: text, exported_at: new Date().toISOString(), source: 'VEYRA AI' }, null, 2);
+    if (format.id === 'markdown') output = `# VEYRA AI Export\n\n${text}\n\n---\n*Exported on ${new Date().toLocaleString()}*`;
     const blob = new Blob([output], { type: format.mime });
     const url = URL.createObjectURL(blob);
-    const a = document.createElement('a'); a.href = url; a.download = `elevateai_export${format.ext}`; a.click();
+    const a = document.createElement('a'); a.href = url; a.download = `veyra_export${format.ext}`; a.click();
     URL.revokeObjectURL(url);
     setExported(true); setTimeout(() => setExported(false), 2000);
   };

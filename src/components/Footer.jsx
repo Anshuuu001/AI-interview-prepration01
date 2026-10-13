@@ -20,7 +20,7 @@ const Footer = () => {
       icon = <Lock className="w-5 h-5 text-indigo-500 dark:text-indigo-400" />;
       content = (
         <div className="space-y-4 text-sm text-slate-600 dark:text-slate-300">
-          <p>At ElevateAI, the security of your personal data and interview recordings is our top priority. We employ industry-standard encryption protocols (TLS 1.2+) for all data in transit and AES-256 for data at rest.</p>
+          <p>At VEYRA AI, the security of your personal data and interview recordings is our top priority. We employ industry-standard encryption protocols (TLS 1.2+) for all data in transit and AES-256 for data at rest.</p>
           <ul className="list-disc pl-5 space-y-2">
             <li><strong>Data Privacy:</strong> We strictly adhere to GDPR and CCPA guidelines. Your resume and interview data are never sold to third parties.</li>
             <li><strong>Anti-Cheat:</strong> Our proctoring system operates strictly within your browser, ensuring no intrusive system-level tracking software is installed on your device.</li>
@@ -33,7 +33,7 @@ const Footer = () => {
       icon = <FileText className="w-5 h-5 text-indigo-500 dark:text-indigo-400" />;
       content = (
         <div className="space-y-4 text-sm text-slate-600 dark:text-slate-300">
-          <p>By accessing and using ElevateAI, you agree to comply with the following terms:</p>
+          <p>By accessing and using VEYRA AI, you agree to comply with the following terms:</p>
           <ul className="list-disc pl-5 space-y-2">
             <li><strong>Usage Policy:</strong> The platform is intended solely for personal career development and interview preparation.</li>
             <li><strong>Account Responsibility:</strong> You are responsible for maintaining the confidentiality of your account credentials.</li>
@@ -109,31 +109,32 @@ const Footer = () => {
 
   return (
     <footer className="mt-12 w-full relative z-10 transition-all duration-300">
-      {/* Outer border & glassmorphic base */}
       <div 
-        className="rounded-3xl p-6 sm:p-8 backdrop-blur-md border"
-        style={{
-          background: 'var(--card-bg, rgba(20, 16, 45, 0.4))',
-          borderColor: 'var(--card-border, rgba(139, 92, 246, 0.15))',
-          boxShadow: '0 8px 32px 0 rgba(0, 0, 0, 0.2)',
-        }}
+        className="rounded-3xl p-6 sm:p-8 bg-white dark:bg-[#131E54] border border-[#E7E2DC] dark:border-white/10 shadow-[0_2px_8px_-2px_rgba(16,25,74,0.05)]"
       >
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8 pb-8 border-b border-white/5 dark:border-slate-800/60">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8 pb-8 border-b border-[#E7E2DC] dark:border-white/10">
           {/* Brand & Platform Bio */}
           <div className="space-y-3">
-            <div className="flex items-center gap-2">
-              <div className="p-2 rounded-xl bg-primary-500/10 border border-primary-500/25 flex items-center justify-center">
-                <Sparkles className="w-5 h-5 text-primary-400" />
+            <div className="flex items-center gap-3">
+              <img 
+                src="/veyra-logo.png" 
+                alt="VEYRA AI Logo" 
+                className="w-10 h-10 object-contain rounded-xl bg-[#10194A] p-1 border border-[#E7E2DC]" 
+              />
+              <div>
+                <span className="font-editorial text-2xl font-bold tracking-tight text-[#10194A] dark:text-[#FAF5EF]">
+                  VEYRA AI
+                </span>
+                <p className="text-[10px] text-[#EBA66F] font-sans font-semibold uppercase tracking-wider -mt-0.5">
+                  Your Next Interview, Smarter
+                </p>
               </div>
-              <span className="text-lg font-black bg-gradient-to-r from-primary-400 to-indigo-300 bg-clip-text text-transparent tracking-tight">
-                ElevateAI
-              </span>
             </div>
-            <p className="text-xs text-slate-400 dark:text-slate-300 leading-relaxed max-w-sm">
+            <p className="text-xs text-[#666675] dark:text-[#C4C4D4] leading-relaxed max-w-sm">
               An intelligent, next-generation career accelerator and interview preparation portal. Powered by advanced artificial intelligence to refine and elevate candidate performance.
             </p>
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-bold bg-emerald-500/10 border border-emerald-500/20 text-emerald-400">
-              <ShieldCheck className="w-3.5 h-3.5" />
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-semibold bg-[#DFE8F7] border border-[#C9D9F2] text-[#10194A]">
+              <ShieldCheck className="w-3.5 h-3.5 text-[#27845B]" />
               Anti-Cheat Shield Active
             </div>
           </div>
@@ -209,7 +210,7 @@ const Footer = () => {
         {/* Footer bottom bar */}
         <div className="flex flex-col sm:flex-row items-center justify-between gap-4 text-[11px] text-slate-500 dark:text-slate-400">
           <div className="flex items-center gap-1">
-            <span>© {new Date().getFullYear()} ElevateAI. Built with</span>
+            <span>© {new Date().getFullYear()} VEYRA AI. Built with</span>
             <Heart className="w-3 h-3 text-rose-500 fill-rose-500 animate-pulse mx-0.5" />
             <span>for placement success.</span>
           </div>

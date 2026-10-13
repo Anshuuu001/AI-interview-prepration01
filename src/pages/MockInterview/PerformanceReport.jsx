@@ -10,10 +10,15 @@ import {
   ArrowLeft,
   HelpCircle,
   MessageSquare,
-  ThumbsUp
+  Sparkles,
+  ShieldCheck,
+  CheckCircle2,
+  TrendingUp,
+  AlertCircle
 } from 'lucide-react';
 import { getScoreColor } from '../../utils/formatters';
 import { getTranslation } from '../../utils/translations';
+import Footer from '../../components/Footer';
 
 const PerformanceReport = () => {
   const { id } = useParams();
@@ -40,178 +45,208 @@ const PerformanceReport = () => {
 
   if (!report) return <Loader message={getTranslation('loadingGradingDashboard')} />;
 
-  const overallColor = getScoreColor(report.overallScore);
+  const overall = report.overallScore || 0;
+  const overallBadgeColor = overall >= 80 
+    ? 'bg-[#27845B]/10 text-[#27845B] border-[#27845B]/20' 
+    : overall >= 60 
+      ? 'bg-[#B87924]/10 text-[#B87924] border-[#B87924]/20' 
+      : 'bg-[#C44848]/10 text-[#C44848] border-[#C44848]/20';
 
   return (
-    <div className="max-w-4xl mx-auto space-y-6 animate-fade-in-up">
-      {/* Header breadcrumb */}
+    <div className="max-w-4xl mx-auto space-y-8 animate-fade-in-up font-sans">
+      
+      {/* Header breadcrumb & Meta */}
       <div className="flex items-center justify-between">
         <button
           onClick={() => navigate('/interview')}
-          className="flex items-center gap-2 text-xs font-semibold text-slate-400 hover:text-slate-100 transition-colors"
+          className="flex items-center gap-2 text-xs font-semibold text-[#666675] hover:text-[#10194A] dark:hover:text-white transition-colors"
         >
           <ArrowLeft className="w-4 h-4" />
-          {getTranslation('backToInterviews')}
+          <span>{getTranslation('backToInterviews')}</span>
         </button>
 
-        <span className="text-xs text-slate-500">{getTranslation('evaluatedOn')} {new Date(report.date).toLocaleDateString()}</span>
+        <span className="text-xs text-[#666675] dark:text-[#C4C4D4] font-medium">
+          {getTranslation('evaluatedOn')} {new Date(report.date).toLocaleDateString()}
+        </span>
       </div>
 
       {/* Main Title Banner */}
-      <div className="glass-panel border border-slate-200 dark:border-slate-800/80 rounded-2xl p-6 flex flex-col md:flex-row md:items-center justify-between gap-6">
+      <div className="bg-white dark:bg-[#131E54] border border-[#E7E2DC] dark:border-white/10 rounded-2xl p-6 sm:p-8 flex flex-col md:flex-row md:items-center justify-between gap-6 shadow-sm">
         <div>
-          <h2 className="text-2xl font-bold text-slate-100 tracking-tight">{report.roleTitle}</h2>
-          <p className="text-xs text-slate-400 mt-1">{getTranslation('performanceAppraisal')}</p>
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-semibold bg-[#DFE8F7] text-[#10194A] border border-[#C9D9F2] mb-2">
+            <Sparkles className="w-3.5 h-3.5" />
+            <span>VEYRA Insights • AI Performance Appraisal</span>
+          </div>
+          <h1 className="text-2xl sm:text-3xl font-editorial font-normal text-[#10194A] dark:text-[#FAF5EF]">
+            {report.roleTitle}
+          </h1>
+          <p className="text-xs text-[#666675] dark:text-[#C4C4D4] mt-1 font-sans">
+            Comprehensive diagnostic of your answers, communication structure, and technical depth evaluated by VEYRA AI.
+          </p>
         </div>
 
-        <div className="flex gap-4">
-          <Button variant="secondary" onClick={() => navigate('/dashboard')}>
-            {getTranslation('backToDashboard')}
+        <div className="flex items-center gap-3">
+          <Button variant="secondary" size="sm" onClick={() => navigate('/dashboard')}>
+            Dashboard
           </Button>
-          <Button variant="primary" onClick={() => navigate('/interview')}>
-            {getTranslation('takeAnotherPractice')}
+          <Button variant="primary" size="sm" onClick={() => navigate('/interview')}>
+            Take Another Practice
           </Button>
         </div>
       </div>
 
-      {/* Scores and radar cards */}
-      <div className={`grid grid-cols-1 sm:grid-cols-2 gap-5 ${report.integrityScore !== undefined ? 'md:grid-cols-5' : 'md:grid-cols-4'}`}>
+      {/* Score Grid Cards */}
+      <div className={`grid grid-cols-2 ${report.integrityScore !== undefined ? 'md:grid-cols-5' : 'md:grid-cols-4'} gap-4`}>
+        
         {/* Overall Score Card */}
-        <Card className="text-center py-6">
-          <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-3">{getTranslation('overallPerformance')}</p>
-          <div className={`text-4xl font-extrabold mb-2 ${overallColor.text}`}>{report.overallScore}%</div>
-          <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-bold border ${overallColor.bg} ${overallColor.border} ${overallColor.text}`}>
-            {report.overallScore >= 80 ? getTranslation('distinguished') : report.overallScore >= 60 ? getTranslation('competent') : getTranslation('needsWork')}
+        <div className="bg-white dark:bg-[#131E54] p-5 rounded-2xl border border-[#E7E2DC] dark:border-white/10 text-center shadow-xs flex flex-col justify-between">
+          <p className="text-[11px] font-bold text-[#666675] uppercase tracking-wider mb-2">Overall Score</p>
+          <div className="text-3xl sm:text-4xl font-bold text-[#10194A] dark:text-[#FAF5EF] mb-2">{overall}%</div>
+          <span className={`inline-block px-2.5 py-0.5 rounded-full text-[10px] font-bold border ${overallBadgeColor}`}>
+            {overall >= 80 ? 'Distinguished' : overall >= 60 ? 'Competent' : 'Needs Practice'}
           </span>
-        </Card>
+        </div>
 
         {/* Technical Score Card */}
-        <Card className="text-center py-6">
-          <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-3">{getTranslation('technicalRemark')}</p>
-          <div className="text-3xl font-extrabold text-slate-100 mb-2">{report.technicalScore}%</div>
-          <div className="w-full bg-slate-800 dark:bg-slate-850 h-2 rounded-full overflow-hidden mt-4">
-            <div className="h-full bg-gradient-to-r from-indigo-500 to-cyan-400 rounded-full" style={{ width: `${report.technicalScore}%` }} />
+        <div className="bg-white dark:bg-[#131E54] p-5 rounded-2xl border border-[#E7E2DC] dark:border-white/10 text-center shadow-xs flex flex-col justify-between">
+          <p className="text-[11px] font-bold text-[#666675] uppercase tracking-wider mb-2">Technical Depth</p>
+          <div className="text-3xl font-bold text-[#10194A] dark:text-[#FAF5EF] mb-2">{report.technicalScore || 0}%</div>
+          <div className="w-full bg-[#FAF5EF] dark:bg-white/10 h-1.5 rounded-full overflow-hidden">
+            <div className="h-full bg-[#10194A] dark:bg-[#DFE8F7] rounded-full" style={{ width: `${report.technicalScore || 0}%` }} />
           </div>
-        </Card>
+        </div>
 
         {/* Behavioral Score Card */}
-        <Card className="text-center py-6">
-          <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-3">{getTranslation('behavioralRemark')}</p>
-          <div className="text-3xl font-extrabold text-slate-100 mb-2">{report.behavioralScore}%</div>
-          <div className="w-full bg-slate-800 dark:bg-slate-850 h-2 rounded-full overflow-hidden mt-4">
-            <div className="h-full bg-gradient-to-r from-purple-500 to-pink-400 rounded-full" style={{ width: `${report.behavioralScore}%` }} />
+        <div className="bg-white dark:bg-[#131E54] p-5 rounded-2xl border border-[#E7E2DC] dark:border-white/10 text-center shadow-xs flex flex-col justify-between">
+          <p className="text-[11px] font-bold text-[#666675] uppercase tracking-wider mb-2">STAR Structure</p>
+          <div className="text-3xl font-bold text-[#10194A] dark:text-[#FAF5EF] mb-2">{report.behavioralScore || 0}%</div>
+          <div className="w-full bg-[#FAF5EF] dark:bg-white/10 h-1.5 rounded-full overflow-hidden">
+            <div className="h-full bg-[#EBA66F] rounded-full" style={{ width: `${report.behavioralScore || 0}%` }} />
           </div>
-        </Card>
+        </div>
 
         {/* Camera Presence Card */}
-        <Card className="text-center py-6">
-          <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-3">{getTranslation('cameraPresence')}</p>
-          <div className="text-3xl font-extrabold text-slate-100 mb-2">{report.presenceScore ?? 100}%</div>
-          <div className="w-full bg-slate-800 dark:bg-slate-850 h-2 rounded-full overflow-hidden mt-4">
-            <div className="h-full bg-gradient-to-r from-emerald-500 to-teal-400 rounded-full" style={{ width: `${report.presenceScore ?? 100}%` }} />
+        <div className="bg-white dark:bg-[#131E54] p-5 rounded-2xl border border-[#E7E2DC] dark:border-white/10 text-center shadow-xs flex flex-col justify-between">
+          <p className="text-[11px] font-bold text-[#666675] uppercase tracking-wider mb-2">Camera Presence</p>
+          <div className="text-3xl font-bold text-[#10194A] dark:text-[#FAF5EF] mb-2">{report.presenceScore ?? 100}%</div>
+          <div className="w-full bg-[#FAF5EF] dark:bg-white/10 h-1.5 rounded-full overflow-hidden">
+            <div className="h-full bg-[#27845B] rounded-full" style={{ width: `${report.presenceScore ?? 100}%` }} />
           </div>
-        </Card>
+        </div>
 
         {/* AI Integrity Score Card */}
         {report.integrityScore !== undefined && (
-          <Card className="text-center py-6">
-            <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-3">AI Integrity Score</p>
-            <div className={`text-3xl font-extrabold mb-2 ${report.integrityScore >= 75 ? 'text-emerald-500' : 'text-rose-500'}`}>{report.integrityScore}%</div>
-            <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-bold border ${
+          <div className="bg-white dark:bg-[#131E54] p-5 rounded-2xl border border-[#E7E2DC] dark:border-white/10 text-center shadow-xs flex flex-col justify-between col-span-2 md:col-span-1">
+            <p className="text-[11px] font-bold text-[#666675] uppercase tracking-wider mb-2">Integrity</p>
+            <div className={`text-3xl font-bold mb-2 ${report.integrityScore >= 75 ? 'text-[#27845B]' : 'text-[#C44848]'}`}>
+              {report.integrityScore}%
+            </div>
+            <span className={`inline-block px-2 py-0.5 rounded-full text-[10px] font-bold border ${
               report.cheatingRisk === 'Low'
-                ? 'bg-emerald-500/10 border-emerald-500/20 text-emerald-400'
-                : 'bg-rose-500/10 border-rose-500/20 text-rose-500'
+                ? 'bg-[#27845B]/10 border-[#27845B]/20 text-[#27845B]'
+                : 'bg-[#C44848]/10 border-[#C44848]/20 text-[#C44848]'
             }`}>
-              {report.cheatingRisk} Risk
+              {report.cheatingRisk || 'Low'} Risk
             </span>
-          </Card>
+          </div>
         )}
       </div>
 
       {/* General feedback summary card */}
-      <Card title={getTranslation('overallAiEvaluationRemarks')} subtitle={getTranslation('summaryFeedbackSub')}>
+      <Card title="Overall AI Evaluation Remarks" subtitle="Summary feedback synthesized from your full interview responses.">
         <div className="flex items-start gap-4">
-          <div className="p-3 bg-primary-600/10 border border-primary-500/20 rounded-xl text-primary-400 flex-shrink-0">
-            <Award className="w-6 h-6" />
+          <div className="p-3 bg-[#DFE8F7] text-[#10194A] rounded-xl flex-shrink-0">
+            <Award className="w-5 h-5 text-[#10194A]" />
           </div>
-          <p className="text-sm text-slate-300 leading-relaxed font-light">
-            {report.feedback}
+          <p className="text-sm text-[#22243A] dark:text-[#FAF5EF] leading-relaxed">
+            {report.feedback || "Your session demonstrated solid technical foundations. Focus on providing concise metrics and explicit outcomes in your STAR responses to elevate your scoring further."}
           </p>
         </div>
       </Card>
 
-      {/* Interactive Transcripts Accordion */}
-      <div>
-        <h3 className="text-sm font-bold text-slate-400 uppercase tracking-widest mb-4 flex items-center gap-2">
-          <BookOpen className="w-4.5 h-4.5 text-indigo-400" />
-          {getTranslation('questionDiagnostics')} ({report.qaList.length})
-        </h3>
+      {/* Question Diagnostics */}
+      <div className="space-y-4">
+        <div className="flex items-center justify-between">
+          <h2 className="text-sm font-bold text-[#10194A] dark:text-[#FAF5EF] uppercase tracking-wider flex items-center gap-2">
+            <BookOpen className="w-4 h-4 text-[#10194A]" />
+            Question-by-Question Diagnostics ({report.qaList?.length || 0})
+          </h2>
+        </div>
 
         <div className="space-y-6">
-          {report.qaList.map((qa, index) => {
-            const qaScoreColor = getScoreColor(qa.score);
+          {(report.qaList || []).map((qa, index) => {
+            const qaScore = qa.score || 0;
+            const qaBadge = qaScore >= 80 
+              ? 'bg-[#27845B]/10 text-[#27845B] border-[#27845B]/20' 
+              : qaScore >= 60 
+                ? 'bg-[#B87924]/10 text-[#B87924] border-[#B87924]/20' 
+                : 'bg-[#C44848]/10 text-[#C44848] border-[#C44848]/20';
+
             return (
               <Card
                 key={index}
-                title={`${getTranslation('question')} ${index + 1}`}
+                title={`Question ${index + 1}`}
                 actions={
-                  <span className={`px-2.5 py-1 rounded-lg text-xs font-bold border ${qaScoreColor.bg} ${qaScoreColor.border} ${qaScoreColor.text}`}>
-                    {getTranslation('scoreLabel')}: {qa.score}%
+                  <span className={`px-2.5 py-1 rounded-full text-xs font-bold border ${qaBadge}`}>
+                    Score: {qaScore}%
                   </span>
                 }
               >
-                <div className="space-y-5 text-sm">
-                  {/* Question */}
-                  <div className="p-3.5 bg-slate-900/5 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-850 rounded-xl">
-                    <p className="text-slate-400 text-xs font-bold uppercase tracking-wider mb-1 flex items-center gap-1.5">
-                      <HelpCircle className="w-3.5 h-3.5 text-primary-400" />
-                      {getTranslation('questionAsked')}
-                    </p>
-                    <p className="text-slate-100 font-semibold leading-relaxed">{qa.question}</p>
+                <div className="space-y-4 text-xs sm:text-sm">
+                  {/* Prompt Box */}
+                  <div className="p-4 bg-[#FAF5EF] dark:bg-white/5 border border-[#E7E2DC] dark:border-white/10 rounded-xl space-y-1">
+                    <span className="text-[10px] font-bold text-[#666675] uppercase tracking-wider flex items-center gap-1.5">
+                      <HelpCircle className="w-3.5 h-3.5 text-[#10194A]" />
+                      Interview Prompt
+                    </span>
+                    <p className="text-sm font-bold text-[#10194A] dark:text-[#FAF5EF] leading-snug">{qa.question}</p>
                     {qa.correctness && (
-                      <div className="mt-3 flex gap-3 text-[10px] font-bold uppercase">
-                         <span className="text-indigo-400">{getTranslation('accuracy')}: {qa.correctness}</span>
+                      <div className="pt-2">
+                        <span className="text-[10px] font-bold text-[#27845B] bg-[#27845B]/10 px-2 py-0.5 rounded-md">
+                          Accuracy: {qa.correctness}
+                        </span>
                       </div>
                     )}
                   </div>
 
-                  {/* User Answer */}
-                  <div className="p-3.5 bg-slate-900/5 dark:bg-slate-900/30 border border-slate-200 dark:border-slate-850/50 rounded-xl">
-                    <p className="text-slate-400 text-xs font-bold uppercase tracking-wider mb-1">{getTranslation('yourResponse')}</p>
-                    <p className="text-slate-300 italic whitespace-pre-line font-light leading-relaxed">
+                  {/* Candidate Response */}
+                  <div className="p-4 bg-white dark:bg-[#0E174B] border border-[#E7E2DC] dark:border-white/10 rounded-xl space-y-1">
+                    <span className="text-[10px] font-bold text-[#666675] uppercase tracking-wider">Candidate Response</span>
+                    <p className="text-[#22243A] dark:text-[#C4C4D4] italic whitespace-pre-line leading-relaxed">
                       "{qa.userAnswer}"
                     </p>
                   </div>
 
-                  {/* Technical Knowledge Assessor */}
+                  {/* Technical Depth */}
                   {qa.technicalKnowledge && (
-                    <div className="p-3.5 bg-primary-600/5 border border-primary-500/10 rounded-xl">
-                      <p className="text-primary-400 text-xs font-bold uppercase tracking-wider mb-1 flex items-center gap-1.5">
-                        <MessageSquare className="w-3.5 h-3.5" />
-                        {getTranslation('technicalKnowledge')}
-                      </p>
-                      <p className="text-slate-300 leading-relaxed font-light">{qa.technicalKnowledge}</p>
+                    <div className="p-4 bg-[#DFE8F7]/40 border border-[#C9D9F2] rounded-xl space-y-1">
+                      <span className="text-[10px] font-bold text-[#10194A] uppercase tracking-wider flex items-center gap-1.5">
+                        <MessageSquare className="w-3.5 h-3.5 text-[#10194A]" />
+                        Technical Analysis
+                      </span>
+                      <p className="text-[#22243A] leading-relaxed">{qa.technicalKnowledge}</p>
                     </div>
                   )}
 
-                  {/* Professional Communication Check */}
+                  {/* Communication */}
                   {qa.communication && (
-                    <div className="p-3.5 bg-purple-500/5 border border-purple-500/20 rounded-xl">
-                      <p className="text-purple-400 text-xs font-bold uppercase tracking-wider mb-1 flex items-center gap-1.5">
+                    <div className="p-4 bg-white dark:bg-white/5 border border-[#E7E2DC] dark:border-white/10 rounded-xl space-y-1">
+                      <span className="text-[10px] font-bold text-[#EBA66F] uppercase tracking-wider flex items-center gap-1.5">
                         <Award className="w-3.5 h-3.5" />
-                        {getTranslation('professionalCommunication')}
-                      </p>
-                      <p className="text-slate-300 leading-relaxed font-light text-sm">{qa.communication}</p>
+                        Communication Delivery
+                      </span>
+                      <p className="text-[#22243A] dark:text-[#C4C4D4] leading-relaxed">{qa.communication}</p>
                     </div>
                   )}
 
-                  {/* Suggestion / Action Item */}
+                  {/* Improvement Recommendation */}
                   {qa.suggestions && (
-                    <div className="p-3.5 bg-amber-500/5 border border-amber-500/10 rounded-xl flex flex-col gap-3">
-                      <div>
-                          <p className="text-amber-400 text-xs font-bold uppercase tracking-wider mb-1">{getTranslation('improvementSuggestion')}</p>
-                          <p className="text-slate-300 leading-relaxed font-light text-sm">{qa.suggestions}</p>
-                      </div>
+                    <div className="p-4 bg-[#FAF5EF] dark:bg-white/5 border border-[#EBA66F]/40 rounded-xl space-y-1">
+                      <span className="text-[10px] font-bold text-[#B87924] uppercase tracking-wider flex items-center gap-1.5">
+                        <AlertCircle className="w-3.5 h-3.5 text-[#B87924]" />
+                        Recommended Next Step
+                      </span>
+                      <p className="text-[#22243A] dark:text-[#C4C4D4] leading-relaxed">{qa.suggestions}</p>
                     </div>
                   )}
                 </div>
@@ -220,6 +255,8 @@ const PerformanceReport = () => {
           })}
         </div>
       </div>
+
+      <Footer />
     </div>
   );
 };

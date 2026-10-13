@@ -56,12 +56,12 @@ app.use('/api/nexus', nexusRoutes);
 
 // Health check
 app.get('/api/health', (req, res) => {
-  res.json({ status: 'ok', message: 'ElevateAI Backend is running!' });
+  res.json({ status: 'ok', message: 'VEYRA AI Backend is running!' });
 });
 
 // Root path handler to prevent 404 errors on direct access or ping checks
 app.get('/', (req, res) => {
-  res.json({ status: 'ok', message: 'ElevateAI Backend API is online!' });
+  res.json({ status: 'ok', message: 'VEYRA AI Backend API is online!' });
 });
 
 // Quiet browser favicon requests to prevent 404 console errors

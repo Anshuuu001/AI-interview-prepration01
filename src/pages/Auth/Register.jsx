@@ -49,30 +49,40 @@ const Register = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center p-6 bg-slate-50 dark:bg-slate-950 transition-colors duration-300">
+    <div className="min-h-screen flex flex-col items-center justify-center p-6 bg-[#FAF5EF] text-[#22243A] transition-colors duration-300">
       <div className="w-full max-w-md animate-fade-in-up">
         {/* Brand Logo & Header */}
         <div className="flex flex-col items-center mb-8 text-center">
-          <div className="w-10 h-10 rounded-xl bg-slate-900 dark:bg-slate-100 flex items-center justify-center mb-3.5 shadow-sm">
-            <Zap className="w-5 h-5 text-white dark:text-slate-900" fill="currentColor" />
+          <div 
+            onClick={() => navigate('/')}
+            className="cursor-pointer flex flex-col items-center mb-3 hover:scale-105 transition-all"
+          >
+            <img 
+              src="/veyra-logo.png" 
+              alt="VEYRA AI Logo" 
+              className="h-16 w-auto object-contain rounded-2xl shadow-sm" 
+            />
           </div>
-          <h1 className="text-2xl font-display font-semibold tracking-tight text-slate-900 dark:text-white">
+          <h1 className="font-serif text-3xl sm:text-4xl font-normal tracking-tight text-[#10194A]">
             Create Account
           </h1>
-          <p className="text-slate-500 dark:text-slate-400 text-xs mt-1 font-sans">
-            Get started with ElevateAI today
+          <p className="text-sm font-sans text-[#666675] mt-1.5">
+            Begin your journey to interview mastery with VEYRA AI
           </p>
         </div>
 
-        {/* Minimal Register Card */}
-        <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800/80 rounded-2xl shadow-sm overflow-hidden p-8">
-          <h2 className="text-base font-semibold text-slate-800 dark:text-slate-250 mb-5 flex items-center gap-2">
-            <UserPlus className="w-4 h-4 text-slate-700 dark:text-slate-300" />
-            Sign Up
-          </h2>
+        {/* Editorial Register Card */}
+        <div className="bg-white border border-[#E7E2DC] rounded-2xl shadow-sm overflow-hidden p-8 sm:p-10">
+          <div className="flex items-center justify-between mb-6 pb-4 border-b border-[#E7E2DC]">
+            <h2 className="font-sans text-base font-semibold text-[#10194A] flex items-center gap-2">
+              <span className="w-2 h-2 rounded-full bg-[#E97878]"></span>
+              Candidate Registration
+            </h2>
+            <span className="text-xs text-[#666675] font-medium">Free Access</span>
+          </div>
 
           {error && (
-            <div className="mb-5 p-3 rounded-lg bg-rose-500/10 border border-rose-500/20 text-rose-600 dark:text-rose-400 text-xs font-medium">
+            <div className="mb-5 p-3 rounded-xl bg-[#C44848]/10 border border-[#C44848]/20 text-[#C44848] text-xs font-medium">
               {error}
             </div>
           )}
@@ -80,19 +90,19 @@ const Register = () => {
           <form onSubmit={handleSubmit} className="space-y-4">
             {/* Full Name */}
             <div>
-              <label className="block text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-2">
+              <label className="block text-[11px] font-semibold text-[#666675] uppercase tracking-wider mb-2">
                 Full Name
               </label>
               <div className="relative">
-                <span className="absolute inset-y-0 left-0 pl-3.5 flex items-center text-slate-400 dark:text-slate-500">
+                <span className="absolute inset-y-0 left-0 pl-3.5 flex items-center text-[#666675]">
                   <User className="w-4 h-4" />
                 </span>
                 <input
                   type="text"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  placeholder="John Doe"
-                  className="w-full pl-10 pr-4 py-2.5 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 focus:border-indigo-500 dark:focus:border-indigo-500 rounded-xl text-slate-900 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-500 text-sm transition-all focus:outline-none focus:ring-2 focus:ring-indigo-500/10"
+                  placeholder="Alex Morgan"
+                  className="w-full pl-10 pr-4 py-2.5 bg-[#FAF5EF]/50 border border-[#E7E2DC] focus:border-[#10194A] rounded-xl text-[#22243A] placeholder-[#666675]/50 text-sm transition-all focus:outline-none focus:ring-1 focus:ring-[#10194A]"
                   required
                 />
               </div>
@@ -100,11 +110,11 @@ const Register = () => {
 
             {/* Email */}
             <div>
-              <label className="block text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-2">
+              <label className="block text-[11px] font-semibold text-[#666675] uppercase tracking-wider mb-2">
                 Email Address
               </label>
               <div className="relative">
-                <span className="absolute inset-y-0 left-0 pl-3.5 flex items-center text-slate-400 dark:text-slate-500">
+                <span className="absolute inset-y-0 left-0 pl-3.5 flex items-center text-[#666675]">
                   <Mail className="w-4 h-4" />
                 </span>
                 <input
@@ -112,7 +122,7 @@ const Register = () => {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="name@domain.com"
-                  className="w-full pl-10 pr-4 py-2.5 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 focus:border-indigo-500 dark:focus:border-indigo-500 rounded-xl text-slate-900 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-500 text-sm transition-all focus:outline-none focus:ring-2 focus:ring-indigo-500/10"
+                  className="w-full pl-10 pr-4 py-2.5 bg-[#FAF5EF]/50 border border-[#E7E2DC] focus:border-[#10194A] rounded-xl text-[#22243A] placeholder-[#666675]/50 text-sm transition-all focus:outline-none focus:ring-1 focus:ring-[#10194A]"
                   required
                 />
               </div>
@@ -120,11 +130,11 @@ const Register = () => {
 
             {/* Password */}
             <div>
-              <label className="block text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-2">
+              <label className="block text-[11px] font-semibold text-[#666675] uppercase tracking-wider mb-2">
                 Password
               </label>
               <div className="relative">
-                <span className="absolute inset-y-0 left-0 pl-3.5 flex items-center text-slate-400 dark:text-slate-500">
+                <span className="absolute inset-y-0 left-0 pl-3.5 flex items-center text-[#666675]">
                   <Lock className="w-4 h-4" />
                 </span>
                 <input
@@ -132,7 +142,7 @@ const Register = () => {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="••••••••"
-                  className="w-full pl-10 pr-4 py-2.5 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 focus:border-indigo-500 dark:focus:border-indigo-500 rounded-xl text-slate-900 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-500 text-sm transition-all focus:outline-none focus:ring-2 focus:ring-indigo-500/10"
+                  className="w-full pl-10 pr-4 py-2.5 bg-[#FAF5EF]/50 border border-[#E7E2DC] focus:border-[#10194A] rounded-xl text-[#22243A] placeholder-[#666675]/50 text-sm transition-all focus:outline-none focus:ring-1 focus:ring-[#10194A]"
                   required
                 />
               </div>
@@ -141,12 +151,12 @@ const Register = () => {
             <button
               type="submit"
               disabled={loading}
-              className="w-full py-2.5 px-4 bg-slate-900 hover:bg-slate-850 dark:bg-slate-100 dark:hover:bg-slate-200 text-white dark:text-slate-900 font-semibold rounded-xl text-sm transition-all flex items-center justify-center gap-2 hover:scale-[1.005] active:scale-[0.995] mt-2"
+              className="w-full py-2.5 px-4 bg-[#E97878] hover:bg-[#d86565] text-white font-medium rounded-xl text-sm transition-all flex items-center justify-center gap-2 shadow-sm disabled:opacity-75 mt-2"
             >
               {loading ? (
-                <span className="animate-spin rounded-full h-4 w-4 border-2 border-white dark:border-slate-900 border-t-transparent"></span>
+                <span className="animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent"></span>
               ) : (
-                'Register & Continue'
+                'Create Account & Start Practising'
               )}
             </button>
           </form>
@@ -154,22 +164,22 @@ const Register = () => {
           {/* Google Sign-In Section */}
           <div className="mt-6 flex flex-col items-center">
             <div className="flex items-center justify-center w-full mb-4">
-              <div className="h-px bg-slate-200 dark:bg-slate-800 w-full"></div>
-              <span className="px-3 text-[10px] font-semibold text-slate-400 dark:text-slate-500 uppercase tracking-wider bg-transparent">Or</span>
-              <div className="h-px bg-slate-200 dark:bg-slate-800 w-full"></div>
+              <div className="h-px bg-[#E7E2DC] w-full"></div>
+              <span className="px-3 text-[10px] font-semibold text-[#666675] uppercase tracking-wider bg-transparent">Or</span>
+              <div className="h-px bg-[#E7E2DC] w-full"></div>
             </div>
             
             <button
               type="button"
               onClick={handleGoogleLogin}
               disabled={googleLoading}
-              className="w-full flex items-center justify-center gap-3 px-4 py-2.5 rounded-xl bg-white hover:bg-slate-50 dark:bg-slate-950 dark:hover:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-200 text-sm font-semibold transition-all hover:scale-[1.005] active:scale-[0.995] disabled:opacity-75 disabled:cursor-not-allowed"
+              className="w-full flex items-center justify-center gap-3 px-4 py-2.5 rounded-xl bg-white hover:bg-[#FAF5EF] border border-[#E7E2DC] text-[#22243A] text-sm font-medium transition-all shadow-xs disabled:opacity-75 disabled:cursor-not-allowed"
             >
               {googleLoading ? (
-                <span className="animate-spin rounded-full h-4 w-4 border-2 border-slate-500 border-t-transparent"></span>
+                <span className="animate-spin rounded-full h-4 w-4 border-2 border-[#10194A] border-t-transparent"></span>
               ) : (
                 <>
-                  <svg className="w-5 h-5" viewBox="0 0 24 24">
+                  <svg className="w-4 h-4" viewBox="0 0 24 24">
                     <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
                     <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" />
                     <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" />
@@ -183,9 +193,9 @@ const Register = () => {
         </div>
 
         {/* Footer Link */}
-        <p className="text-slate-550 dark:text-slate-400 text-xs text-center mt-6">
+        <p className="text-[#666675] text-xs text-center mt-6">
           Already have an account?{' '}
-          <Link to="/login" className="text-indigo-600 dark:text-indigo-400 hover:underline font-semibold transition-all">
+          <Link to="/login" className="text-[#10194A] hover:underline font-semibold transition-all">
             Sign In
           </Link>
         </p>

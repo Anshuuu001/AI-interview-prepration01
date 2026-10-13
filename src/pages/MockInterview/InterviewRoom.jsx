@@ -689,29 +689,34 @@ Questions: ${JSON.stringify(questionTexts)}`;
 
   if (!verified) {
     return (
-      <div className="max-w-4xl mx-auto py-8 px-4 animate-fade-in-up">
-        <h2 className="text-3xl font-display font-black text-slate-100 flex items-center gap-3 mb-2">
-          <ShieldCheck className="w-8 h-8 text-cognitive-primary" />
-          AI Secure Proctoring Lobby
-        </h2>
-        <p className="text-sm text-slate-400 mb-8 max-w-2xl">
-          Please verify your camera feed, microphone input, proper room lighting, and face mapping status before entering the secure examination zone.
-        </p>
+      <div className="max-w-4xl mx-auto py-8 px-4 animate-fade-in-up font-sans">
+        <div className="space-y-2 mb-8">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold bg-[#DFE8F7] text-[#10194A] border border-[#C9D9F2]">
+            <ShieldCheck className="w-3.5 h-3.5 text-[#27845B]" />
+            <span>VEYRA Practice Room • Pre-Session Verification</span>
+          </div>
+          <h2 className="text-3xl font-editorial font-normal text-[#10194A] dark:text-[#FAF5EF]">
+            Secure Proctoring Lobby
+          </h2>
+          <p className="text-sm text-[#666675] dark:text-[#C4C4D4] max-w-2xl leading-relaxed">
+            Please verify your camera feed, microphone input, proper room lighting, and face mapping status before entering the secure examination zone.
+          </p>
+        </div>
 
         <div className="grid grid-cols-1 md:grid-cols-12 gap-8">
           <div className="md:col-span-5 flex flex-col gap-4">
-            <Card className="liquid-glass-card p-4 relative overflow-hidden flex items-center justify-center min-h-[300px] border border-slate-200/50 dark:border-white/5 shadow-2xl">
+            <div className="bg-white dark:bg-[#131E54] p-4 rounded-2xl border border-[#E7E2DC] dark:border-white/10 shadow-sm relative overflow-hidden flex items-center justify-center min-h-[280px]">
               {matchingFace && (
-                <div className="absolute inset-0 z-20 flex flex-col items-center justify-center bg-black/60 backdrop-blur-sm">
-                  <div className="w-16 h-16 rounded-full border-4 border-cognitive-primary border-t-transparent animate-spin mb-4" />
+                <div className="absolute inset-0 z-20 flex flex-col items-center justify-center bg-[#10194A]/70 backdrop-blur-xs">
+                  <div className="w-12 h-12 rounded-full border-3 border-[#EBA66F] border-t-transparent animate-spin mb-3" />
                   <p className="text-xs font-bold text-white tracking-widest uppercase">Scanning & Matching Face...</p>
                 </div>
               )}
               {cameraError ? (
                 <div className="text-center p-4">
-                  <CameraOff className="w-12 h-12 text-rose-500 mx-auto mb-2 opacity-55" />
-                  <p className="text-sm font-bold text-rose-500">{cameraError}</p>
-                  <Button variant="secondary" size="sm" onClick={startCamera} className="mt-4">Allow Camera</Button>
+                  <CameraOff className="w-10 h-10 text-[#C44848] mx-auto mb-2 opacity-60" />
+                  <p className="text-xs font-bold text-[#C44848]">{cameraError}</p>
+                  <Button variant="secondary" size="sm" onClick={startCamera} className="mt-3">Allow Camera</Button>
                 </div>
               ) : (
                 <div className="relative w-full rounded-xl overflow-hidden bg-black aspect-video flex items-center justify-center">
@@ -723,28 +728,28 @@ Questions: ${JSON.stringify(questionTexts)}`;
                     className="w-full h-full object-cover transform -scale-x-100"
                   />
                   {faceCount === 1 && !faceMatched && (
-                    <div className="absolute inset-x-8 top-8 bottom-8 border-2 border-dashed border-emerald-500 rounded-2xl animate-pulse flex items-center justify-center">
-                      <div className="absolute w-full h-1 bg-emerald-500 top-0 left-0 animate-scan shadow-lg shadow-emerald-500/50" />
+                    <div className="absolute inset-x-8 top-6 bottom-6 border-2 border-dashed border-[#27845B] rounded-xl animate-pulse flex items-center justify-center">
+                      <div className="absolute w-full h-0.5 bg-[#27845B] top-0 left-0 animate-scan shadow-sm" />
                     </div>
                   )}
                   {faceMatched && (
-                    <div className="absolute top-4 right-4 bg-emerald-500 text-white rounded-full p-1.5 shadow-lg">
+                    <div className="absolute top-3 right-3 bg-[#27845B] text-white rounded-full p-1.5 shadow-sm">
                       <ShieldCheck className="w-4 h-4" />
                     </div>
                   )}
                 </div>
               )}
-            </Card>
+            </div>
             
-            <div className="bg-slate-900/5 dark:bg-black/20 p-4 border border-slate-200/50 dark:border-white/5 rounded-xl">
-              <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest flex items-center gap-1.5">
-                <Radio className="w-3.5 h-3.5 text-emerald-500 animate-pulse" /> Live Sound Levels:
+            <div className="bg-white dark:bg-[#131E54] p-4 border border-[#E7E2DC] dark:border-white/10 rounded-2xl shadow-xs">
+              <span className="text-[11px] font-bold text-[#666675] uppercase tracking-wider flex items-center gap-1.5">
+                <Radio className="w-3.5 h-3.5 text-[#27845B] animate-pulse" /> Live Sound Levels:
               </span>
-              <div className="flex items-center gap-2 mt-2">
-                <Mic className="w-4.5 h-4.5 text-slate-400" />
-                <div className="flex-1 h-3 bg-slate-900/10 dark:bg-black/30 rounded overflow-hidden">
+              <div className="flex items-center gap-2 mt-2.5">
+                <Mic className="w-4 h-4 text-[#666675]" />
+                <div className="flex-1 h-2.5 bg-[#FAF5EF] dark:bg-black/30 rounded-full overflow-hidden border border-[#E7E2DC] dark:border-white/10">
                   <div 
-                    className="h-full bg-emerald-500 rounded transition-all duration-75 shadow-lg shadow-emerald-500/30"
+                    className="h-full bg-[#27845B] rounded-full transition-all duration-75"
                     style={{ width: `${Math.min(100, (audioLevel / 128) * 100)}%` }}
                   />
                 </div>
@@ -753,61 +758,61 @@ Questions: ${JSON.stringify(questionTexts)}`;
           </div>
 
           <div className="md:col-span-7">
-            <Card className="liquid-glass-card p-6 flex flex-col gap-6 border border-slate-200/50 dark:border-white/5 shadow-2xl">
-              <h3 className="text-lg font-bold text-slate-100 mb-2">Proctor Readiness Checklist</h3>
+            <div className="bg-white dark:bg-[#131E54] p-6 sm:p-7 rounded-2xl border border-[#E7E2DC] dark:border-white/10 shadow-sm flex flex-col gap-6">
+              <h3 className="text-base font-bold text-[#10194A] dark:text-[#FAF5EF]">Proctor Readiness Checklist</h3>
               
               <div className="space-y-4">
-                <div className="flex items-start gap-4">
-                  <div className={`p-1.5 rounded-full flex-shrink-0 mt-0.5 ${stream ? 'bg-emerald-500/10 text-emerald-500' : 'bg-rose-500/10 text-rose-500'}`}>
-                    {stream ? <ShieldCheck className="w-5 h-5" /> : <AlertTriangle className="w-5 h-5" />}
+                <div className="flex items-start gap-3.5">
+                  <div className={`p-1.5 rounded-full flex-shrink-0 mt-0.5 ${stream ? 'bg-[#27845B]/10 text-[#27845B]' : 'bg-[#C44848]/10 text-[#C44848]'}`}>
+                    {stream ? <ShieldCheck className="w-4 h-4" /> : <AlertTriangle className="w-4 h-4" />}
                   </div>
                   <div>
-                    <h4 className="text-sm font-bold text-slate-200">Camera Feed Authorization {template?.isVideo ? '(Required)' : '(Optional)'}</h4>
-                    <p className="text-xs text-slate-400 mt-0.5">Permits live visual proctor tracking during assessment.</p>
+                    <h4 className="text-xs font-bold text-[#10194A] dark:text-[#FAF5EF]">Camera Feed Authorization {template?.isVideo ? '(Required)' : '(Optional)'}</h4>
+                    <p className="text-xs text-[#666675] dark:text-[#C4C4D4] mt-0.5">Permits live visual proctor tracking during assessment.</p>
                   </div>
                 </div>
 
-                <div className="flex items-start gap-4">
-                  <div className={`p-1.5 rounded-full flex-shrink-0 mt-0.5 ${audioLevel > 5 ? 'bg-emerald-500/10 text-emerald-500' : 'bg-rose-500/10 text-rose-500'}`}>
-                    {audioLevel > 5 ? <ShieldCheck className="w-5 h-5" /> : <AlertTriangle className="w-5 h-5" />}
+                <div className="flex items-start gap-3.5">
+                  <div className={`p-1.5 rounded-full flex-shrink-0 mt-0.5 ${audioLevel > 5 ? 'bg-[#27845B]/10 text-[#27845B]' : 'bg-[#C44848]/10 text-[#C44848]'}`}>
+                    {audioLevel > 5 ? <ShieldCheck className="w-4 h-4" /> : <AlertTriangle className="w-4 h-4" />}
                   </div>
                   <div>
-                    <h4 className="text-sm font-bold text-slate-200">Active Microphone Recording (Required)</h4>
-                    <p className="text-xs text-slate-400 mt-0.5">Analyzes room noise levels. Speak into the mic to verify.</p>
+                    <h4 className="text-xs font-bold text-[#10194A] dark:text-[#FAF5EF]">Active Microphone Input (Required)</h4>
+                    <p className="text-xs text-[#666675] dark:text-[#C4C4D4] mt-0.5">Analyzes room noise levels. Speak into the mic to verify.</p>
                   </div>
                 </div>
 
                 {template?.isVideo && (
                   <>
-                    <div className="flex items-start gap-4">
-                      <div className={`p-1.5 rounded-full flex-shrink-0 mt-0.5 ${lightingStatus === 'good' ? 'bg-emerald-500/10 text-emerald-500' : 'bg-rose-500/10 text-rose-500'}`}>
-                        {lightingStatus === 'good' ? <ShieldCheck className="w-5 h-5" /> : <AlertTriangle className="w-5 h-5" />}
+                    <div className="flex items-start gap-3.5">
+                      <div className={`p-1.5 rounded-full flex-shrink-0 mt-0.5 ${lightingStatus === 'good' ? 'bg-[#27845B]/10 text-[#27845B]' : 'bg-[#C44848]/10 text-[#C44848]'}`}>
+                        {lightingStatus === 'good' ? <ShieldCheck className="w-4 h-4" /> : <AlertTriangle className="w-4 h-4" />}
                       </div>
                       <div>
-                        <h4 className="text-sm font-bold text-slate-200">Adequate Room Lighting</h4>
-                        <p className="text-xs text-slate-400 mt-0.5">
+                        <h4 className="text-xs font-bold text-[#10194A] dark:text-[#FAF5EF]">Adequate Room Lighting</h4>
+                        <p className="text-xs text-[#666675] dark:text-[#C4C4D4] mt-0.5">
                           {lightingStatus === 'too_dark' ? '⚠️ Lighting is too dark. Brighten your room.' : lightingStatus === 'too_bright' ? '⚠️ Lighting is too bright. Reduce direct light source.' : 'Room illumination is within acceptable metrics.'}
                         </p>
                       </div>
                     </div>
 
-                    <div className="flex items-start gap-4">
-                      <div className={`p-1.5 rounded-full flex-shrink-0 mt-0.5 ${faceCount === 1 ? 'bg-emerald-500/10 text-emerald-500' : 'bg-rose-500/10 text-rose-500'}`}>
-                        {faceCount === 1 ? <ShieldCheck className="w-5 h-5" /> : <AlertTriangle className="w-5 h-5" />}
+                    <div className="flex items-start gap-3.5">
+                  <div className={`p-1.5 rounded-full flex-shrink-0 mt-0.5 ${faceCount === 1 ? 'bg-[#27845B]/10 text-[#27845B]' : 'bg-[#C44848]/10 text-[#C44848]'}`}>
+                        {faceCount === 1 ? <ShieldCheck className="w-4 h-4" /> : <AlertTriangle className="w-4 h-4" />}
                       </div>
                       <div>
-                        <h4 className="text-sm font-bold text-slate-200">Single Candidate Presence</h4>
-                        <p className="text-xs text-slate-400 mt-0.5">Ensure you are sitting directly in front of the lens alone.</p>
+                        <h4 className="text-xs font-bold text-[#10194A] dark:text-[#FAF5EF]">Single Candidate Presence</h4>
+                        <p className="text-xs text-[#666675] dark:text-[#C4C4D4] mt-0.5">Ensure you are sitting directly in front of the lens alone.</p>
                       </div>
                     </div>
 
-                    <div className="flex items-start gap-4">
-                      <div className={`p-1.5 rounded-full flex-shrink-0 mt-0.5 ${faceMatched ? 'bg-emerald-500/10 text-emerald-500' : 'bg-rose-500/10 text-rose-500'}`}>
-                        {faceMatched ? <ShieldCheck className="w-5 h-5" /> : <AlertTriangle className="w-5 h-5" />}
+                    <div className="flex items-start gap-3.5">
+                      <div className={`p-1.5 rounded-full flex-shrink-0 mt-0.5 ${faceMatched ? 'bg-[#27845B]/10 text-[#27845B]' : 'bg-[#C44848]/10 text-[#C44848]'}`}>
+                        {faceMatched ? <ShieldCheck className="w-4 h-4" /> : <AlertTriangle className="w-4 h-4" />}
                       </div>
                       <div>
-                        <h4 className="text-sm font-bold text-slate-200">Facial Signature Verification</h4>
-                        <p className="text-xs text-slate-400 mt-0.5">Matches candidate facial pattern against registration records.</p>
+                        <h4 className="text-xs font-bold text-[#10194A] dark:text-[#FAF5EF]">Facial Signature Verification</h4>
+                        <p className="text-xs text-[#666675] dark:text-[#C4C4D4] mt-0.5">Matches candidate facial pattern against registration records.</p>
                       </div>
                     </div>
                   </>
@@ -815,33 +820,33 @@ Questions: ${JSON.stringify(questionTexts)}`;
               </div>
 
               {template?.isVideo && !stream && (
-                <div className="bg-rose-500/10 border border-rose-500/20 text-rose-500 px-4 py-3 rounded-xl text-xs font-bold flex items-center gap-2">
+                <div className="bg-[#C44848]/10 border border-[#C44848]/20 text-[#C44848] px-4 py-2.5 rounded-xl text-xs font-bold flex items-center gap-2">
                   <AlertTriangle className="w-4 h-4 flex-shrink-0" />
                   <span>Camera is required for Video Interview. Please enable your webcam.</span>
                 </div>
               )}
 
               {!template?.isVideo && audioLevel <= 5 && (
-                <div className="bg-rose-500/10 border border-rose-500/20 text-rose-500 px-4 py-3 rounded-xl text-xs font-bold flex items-center gap-2">
+                <div className="bg-[#C44848]/10 border border-[#C44848]/20 text-[#C44848] px-4 py-2.5 rounded-xl text-xs font-bold flex items-center gap-2">
                   <AlertTriangle className="w-4 h-4 flex-shrink-0" />
-                  <span>Microphone not detected. Please connect a microphone before starting the interview.</span>
+                  <span>Microphone not detected. Please speak or connect a microphone before launching.</span>
                 </div>
               )}
 
-              <div className="mt-4 pt-6 border-t border-slate-250/20">
+              <div className="pt-4 border-t border-[#E7E2DC] dark:border-white/10 space-y-2">
                 <button
                   disabled={template?.isVideo ? !(stream && audioLevel > 5 && lightingStatus === 'good' && faceCount === 1 && faceMatched) : !(audioLevel > 5)}
                   onClick={enterExamHall}
-                  className="w-full flex items-center justify-center gap-2 py-3 bg-gradient-to-r from-cognitive-primary to-cognitive-secondary disabled:from-slate-800 disabled:to-slate-800 disabled:opacity-50 disabled:cursor-not-allowed text-white font-bold rounded-xl shadow-lg transition-all hover:scale-[1.01]"
+                  className="w-full flex items-center justify-center gap-2 py-3 bg-[#E97878] hover:bg-[#DC6666] disabled:bg-[#E7E2DC] disabled:text-[#666675] disabled:cursor-not-allowed text-white font-semibold text-sm rounded-xl shadow-xs transition-all active:scale-[0.98]"
                 >
                   <Play className="w-4 h-4 fill-current" />
                   <span>Enter Exam Hall in Full Screen Mode</span>
                 </button>
-                <p className="text-[10px] text-slate-500 font-bold uppercase tracking-widest text-center mt-3">
-                  ⚠️ Requesting fullscreen is mandatory upon launch. Exiting fullscreen prompts warnings.
+                <p className="text-[11px] text-[#666675] text-center">
+                  Requesting fullscreen is required to maintain assessment integrity.
                 </p>
               </div>
-            </Card>
+            </div>
           </div>
         </div>
       </div>
@@ -884,51 +889,49 @@ Questions: ${JSON.stringify(questionTexts)}`;
       )}
       
       {/* HUD Header Bar */}
-      <div className="flex-shrink-0 flex flex-col md:flex-row md:items-center justify-between gap-4 glass-panel px-6 py-4 rounded-2xl border border-slate-200/50 dark:border-white/10 shadow-lg">
+      <div className="flex-shrink-0 flex flex-col md:flex-row md:items-center justify-between gap-4 bg-white dark:bg-[#131E54] px-6 py-4 rounded-2xl border border-[#E7E2DC] dark:border-white/10 shadow-xs">
         <div>
-          <h2 className="text-2xl sm:text-3xl font-display font-black bg-clip-text text-transparent bg-gradient-to-r from-cognitive-primary to-cognitive-secondary tracking-tight">
+          <h2 className="text-xl sm:text-2xl font-editorial font-bold text-[#10194A] dark:text-[#FAF5EF] tracking-tight">
             {template.title}
           </h2>
           <div className="flex items-center gap-2 mt-1">
-            <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-            <p className="text-xs text-slate-500 font-bold uppercase tracking-widest">
-              {getTranslation('liveSession')} • {template.category} {getTranslation('arena')} • {getTranslation('question')} {currentIdx + 1}/{template.questions.length}
+            <span className="w-2 h-2 rounded-full bg-[#27845B] animate-pulse" />
+            <p className="text-xs text-[#666675] dark:text-[#C4C4D4] font-medium">
+              VEYRA Practice Room • {template.category} • Question {currentIdx + 1} of {template.questions.length}
             </p>
           </div>
         </div>
 
         <div className="flex items-center gap-3 flex-wrap">
           {/* Proctoring HUD Panel */}
-          <div className={`flex items-center gap-3 bg-slate-900/5 dark:bg-black/20 border px-4 py-2 rounded-xl text-xs font-bold shadow-inner ${
+          <div className={`flex items-center gap-2.5 bg-[#FAF5EF] dark:bg-black/20 border px-3.5 py-1.5 rounded-xl text-xs font-semibold ${
             cheatingRisk === 'Critical' || cheatingRisk === 'High'
-              ? 'border-rose-500/30 text-rose-500'
-              : 'border-slate-200/50 dark:border-white/5 text-slate-600 dark:text-slate-300'
+              ? 'border-[#C44848]/30 text-[#C44848]'
+              : 'border-[#E7E2DC] dark:border-white/10 text-[#22243A] dark:text-[#FAF5EF]'
           }`}>
-            <AlertTriangle className="w-4 h-4 text-rose-500" />
-            <div className="flex gap-3">
-              <span>Integrity: <span className="text-emerald-500">{integrityScore}%</span></span>
-              <span className="w-px h-4 bg-slate-300 dark:bg-slate-700" />
-              <span>Risk: <span className={cheatingRisk === 'Critical' || cheatingRisk === 'High' ? "text-rose-500 animate-pulse font-black" : "text-emerald-500"}>{cheatingRisk}</span></span>
-              <span className="w-px h-4 bg-slate-300 dark:bg-slate-700" />
-              <span>Warnings: <span className="text-amber-500 font-bold">{warningCount}/5</span></span>
+            <ShieldCheck className="w-4 h-4 text-[#27845B]" />
+            <div className="flex gap-2.5 text-xs">
+              <span>Integrity: <span className="text-[#27845B] font-bold">{integrityScore}%</span></span>
+              <span className="w-px h-3.5 bg-[#E7E2DC] dark:bg-white/10 self-center" />
+              <span>Warnings: <span className="text-[#B87924] font-bold">{warningCount}/5</span></span>
             </div>
           </div>
 
-          <div className="flex items-center gap-3 bg-slate-900/5 dark:bg-black/20 border border-slate-200/50 dark:border-white/5 px-4 py-2 rounded-xl text-slate-600 dark:text-slate-300 text-xs font-bold shadow-inner">
-            <Activity className="w-4 h-4 text-cognitive-secondary" />
-            <div className="flex gap-3">
-              <span>{getTranslation('fillers')}: <span className={fillerCount > 3 ? "text-rose-500" : "text-emerald-500"}>{fillerCount}</span></span>
-              <span className="w-px h-4 bg-slate-300 dark:bg-slate-700" />
-              <span>{getTranslation('wpmLabel')}: <span className="text-cognitive-primary">{wpm}</span></span>
+          <div className="flex items-center gap-2.5 bg-[#FAF5EF] dark:bg-black/20 border border-[#E7E2DC] dark:border-white/10 px-3.5 py-1.5 rounded-xl text-xs font-semibold text-[#22243A] dark:text-[#FAF5EF]">
+            <Activity className="w-4 h-4 text-[#EBA66F]" />
+            <div className="flex gap-2.5">
+              <span>Fillers: <span className={fillerCount > 3 ? "text-[#C44848] font-bold" : "text-[#27845B] font-bold"}>{fillerCount}</span></span>
+              <span className="w-px h-3.5 bg-[#E7E2DC] dark:bg-white/10 self-center" />
+              <span>Pace: <span className="text-[#10194A] dark:text-[#FAF5EF] font-bold">{wpm} WPM</span></span>
             </div>
           </div>
           
-          <div className={`flex items-center gap-2 border px-4 py-2 rounded-xl text-sm font-black shadow-inner transition-colors duration-300 ${
+          <div className={`flex items-center gap-2 border px-4 py-1.5 rounded-xl text-sm font-bold transition-colors ${
             seconds <= 30 
-              ? 'bg-rose-500/10 border-rose-500/50 text-rose-600 dark:text-rose-400 animate-pulse' 
-              : 'bg-cognitive-primary/5 border-cognitive-primary/30 text-cognitive-primary'
+              ? 'bg-[#C44848]/10 border-[#C44848]/30 text-[#C44848] animate-pulse' 
+              : 'bg-[#10194A] border-[#10194A] text-white'
           }`}>
-            <Clock className={`w-4 h-4 ${seconds <= 30 ? 'animate-bounce' : ''}`} />
+            <Clock className="w-4 h-4" />
             <span>{formatDuration(seconds)}</span>
           </div>
         </div>
@@ -1017,57 +1020,57 @@ Questions: ${JSON.stringify(questionTexts)}`;
           </div>
         )}
 
-        {/* Right pane: Action Center (Col Span 8 or 12 depending on isVideo) */}
+        {/* Right pane: Action Center */}
         <div className={`${template?.isVideo ? 'lg:col-span-8' : 'lg:col-span-12 max-w-5xl mx-auto w-full'} flex flex-col gap-5`}>
           
-          <Card className="liquid-glass-card flex flex-col relative z-10 overflow-hidden p-6 sm:p-7 shadow-xl space-y-5">
+          <div className="bg-white dark:bg-[#131E54] rounded-2xl border border-[#E7E2DC] dark:border-white/10 p-6 sm:p-8 shadow-sm space-y-6">
             {/* Question Section */}
             <div className="space-y-3">
               <div className="flex items-center justify-between">
-                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-lg bg-cognitive-primary/10 border border-cognitive-primary/20 text-xs font-display font-black text-cognitive-primary uppercase tracking-widest">
-                  <Sparkles className="w-4 h-4" />
-                  {getTranslation('promptLabel')} {currentIdx + 1}
+                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#DFE8F7] border border-[#C9D9F2] text-xs font-semibold text-[#10194A]">
+                  <Sparkles className="w-3.5 h-3.5" />
+                  <span>Question {currentIdx + 1} of {template.questions.length}</span>
                 </div>
               </div>
-              <h3 className="text-xl sm:text-2xl font-black text-slate-800 dark:text-slate-100 leading-relaxed max-h-[25vh] overflow-y-auto custom-scrollbar pr-2">
+              <h3 className="text-xl sm:text-2xl font-bold text-[#10194A] dark:text-[#FAF5EF] leading-relaxed max-h-[25vh] overflow-y-auto custom-scrollbar pr-2">
                 {currentQuestionObj.text}
               </h3>
             </div>
 
             {/* Answer Interface */}
-            <div className="flex flex-col gap-3 bg-slate-50/60 dark:bg-slate-900/40 rounded-2xl border border-slate-200/80 dark:border-white/5 p-4 sm:p-5 shadow-inner">
+            <div className="flex flex-col gap-3 bg-[#FAF5EF] dark:bg-black/20 rounded-2xl border border-[#E7E2DC] dark:border-white/10 p-4 sm:p-5">
               <div className="flex justify-between items-center flex-shrink-0">
-                <label className="flex items-center gap-2 text-xs font-display font-black text-slate-500 uppercase tracking-widest">
-                  <Radio className="w-3.5 h-3.5 text-cognitive-secondary" />
-                  {getTranslation('yourInputBuffer')}
+                <label className="flex items-center gap-2 text-xs font-bold text-[#666675] uppercase tracking-wider">
+                  <Radio className="w-3.5 h-3.5 text-[#E97878]" />
+                  <span>Your Response</span>
                 </label>
 
                 <div className="flex items-center gap-2">
                   {recording && (
-                    <span className="text-xs text-cognitive-primary font-bold flex items-center gap-2 px-3 py-1 bg-cognitive-primary/10 rounded-full border border-cognitive-primary/20">
-                      <span className="w-2 h-2 rounded-full bg-cognitive-primary animate-ping" />
-                      {getTranslation('transcribing')}
+                    <span className="text-xs text-[#27845B] font-bold flex items-center gap-2 px-3 py-1 bg-[#27845B]/10 rounded-full border border-[#27845B]/20">
+                      <span className="w-2 h-2 rounded-full bg-[#27845B] animate-ping" />
+                      Listening...
                     </span>
                   )}
 
                   {/* Voice / Text Mode Toggle */}
-                  <div className="flex gap-1 p-0.5 bg-slate-200/80 dark:bg-black/30 rounded-lg border border-slate-300/50 dark:border-white/5">
+                  <div className="flex gap-1 p-0.5 bg-white dark:bg-slate-800 rounded-lg border border-[#E7E2DC] dark:border-white/10">
                     <button
                       onClick={() => setAnswerMode('text')}
-                      className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-[10px] font-bold transition-all ${
+                      className={`flex items-center gap-1.5 px-3 py-1 rounded-md text-xs font-semibold transition-all ${
                         answerMode === 'text'
-                          ? 'bg-white dark:bg-slate-800 text-indigo-600 dark:text-indigo-400 shadow-sm'
-                          : 'text-slate-500 hover:text-slate-700 dark:hover:text-slate-300'
+                          ? 'bg-[#10194A] text-white shadow-xs'
+                          : 'text-[#666675] hover:text-[#10194A]'
                       }`}
                     >
                       <Keyboard className="w-3.5 h-3.5" /> Text
                     </button>
                     <button
                       onClick={() => setAnswerMode('voice')}
-                      className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-[10px] font-bold transition-all ${
+                      className={`flex items-center gap-1.5 px-3 py-1 rounded-md text-xs font-semibold transition-all ${
                         answerMode === 'voice'
-                          ? 'bg-white dark:bg-slate-800 text-emerald-600 dark:text-emerald-400 shadow-sm'
-                          : 'text-slate-500 hover:text-slate-700 dark:hover:text-slate-300'
+                          ? 'bg-[#10194A] text-white shadow-xs'
+                          : 'text-[#666675] hover:text-[#10194A]'
                       }`}
                     >
                       <Mic className="w-3.5 h-3.5" /> Voice
@@ -1076,56 +1079,57 @@ Questions: ${JSON.stringify(questionTexts)}`;
                 </div>
               </div>
               
-              <div className="rounded-xl overflow-hidden shadow-sm border border-slate-200 dark:border-slate-800">
+              <div className="rounded-xl overflow-hidden border border-[#E7E2DC] dark:border-white/10 bg-white dark:bg-[#0E174B]">
                 <textarea
                   value={typedAnswer}
                   onChange={(e) => setTypedAnswer(e.target.value)}
                   onPaste={(e) => e.preventDefault()}
-                  placeholder={answerMode === 'text' ? 'Type your answer here... Structure your response clearly with examples.' : 'Click "Start Microphone" to speak your answer or type directly...'}
+                  placeholder={answerMode === 'text' ? 'Type your answer here... Structure your response clearly using the STAR framework.' : 'Click "Start Recording" to speak your answer or type directly...'}
                   rows={6}
-                  className="w-full p-4 bg-white/70 dark:bg-[#0a0a0f]/80 text-slate-800 dark:text-slate-200 text-base leading-relaxed transition-all focus:outline-none resize-none custom-scrollbar backdrop-blur-sm"
+                  className="w-full p-4 bg-transparent text-[#22243A] dark:text-[#FAF5EF] text-sm sm:text-base leading-relaxed transition-all focus:outline-none resize-none custom-scrollbar"
                   style={{ userSelect: 'text' }}
                 />
               </div>
             </div>
 
             {/* Bottom Action Bar */}
-            <div className="flex items-center justify-between pt-3">
+            <div className="flex items-center justify-between pt-2">
               {answerMode === 'voice' ? (
-                <Button
+                <button
                   onClick={handleToggleRecord}
-                  variant={recording ? 'danger' : 'secondary'}
-                  icon={recording ? MicOff : Mic}
-                  className={`shadow-md material-interactive ${recording ? 'animate-pulse ring-2 ring-rose-500/50' : ''}`}
+                  className={`px-4 py-2.5 rounded-xl font-semibold text-xs flex items-center gap-2 transition-all ${
+                    recording 
+                      ? 'bg-[#C44848] text-white animate-pulse' 
+                      : 'bg-white hover:bg-[#FAF5EF] text-[#10194A] border border-[#E7E2DC]'
+                  }`}
                 >
-                  {recording ? getTranslation('stopRecording') : getTranslation('startMicrophone')}
-                </Button>
+                  {recording ? <MicOff className="w-4 h-4" /> : <Mic className="w-4 h-4" />}
+                  <span>{recording ? 'Stop Recording' : 'Start Recording'}</span>
+                </button>
               ) : (
-                <div className="flex items-center gap-2 text-xs text-slate-400">
-                  <Keyboard className="w-4 h-4 text-indigo-400" />
-                  <span className="font-bold">Text Mode</span>
-                  <span className="text-slate-500">— Type your answer above</span>
+                <div className="flex items-center gap-2 text-xs text-[#666675]">
+                  <Keyboard className="w-4 h-4 text-[#10194A] dark:text-[#DFE8F7]" />
+                  <span className="font-medium">Text Mode — Structure your points with concrete metrics</span>
                 </div>
               )}
 
               <div className="flex items-center gap-4">
                 <button
                   onClick={() => handleNextQuestion(false)}
-                  className="text-sm font-bold text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition-colors material-interactive"
+                  className="text-xs font-semibold text-[#666675] hover:text-[#10194A] dark:hover:text-[#FAF5EF] transition-colors"
                 >
-                  {getTranslation('skipQuestion')}
+                  Skip Question
                 </button>
-                <Button
+                <button
                   onClick={() => handleNextQuestion(false)}
-                  variant="primary"
-                  icon={ArrowRight}
-                  className="px-8 py-3 bg-gradient-to-r from-cognitive-primary to-cognitive-secondary shadow-[0_0_20px_rgba(79,70,229,0.3)] hover:shadow-[0_0_30px_rgba(79,70,229,0.5)] border border-white/20 material-interactive"
+                  className="px-6 py-2.5 rounded-xl bg-[#E97878] hover:bg-[#DC6666] text-white font-semibold text-xs shadow-xs hover:shadow transition-all duration-200 active:scale-95 flex items-center gap-2"
                 >
-                  {currentIdx === template.questions.length - 1 ? getTranslation('completeEvaluation') : getTranslation('submitResponse')}
-                </Button>
+                  <span>{currentIdx === template.questions.length - 1 ? 'Complete Evaluation' : 'Submit & Next Question'}</span>
+                  <ArrowRight className="w-4 h-4" />
+                </button>
               </div>
             </div>
-          </Card>
+          </div>
           
         </div>
       </div>

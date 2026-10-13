@@ -1638,7 +1638,7 @@ const SectionLogs = () => {
    SECTION: SYSTEM SETTINGS
 ═══════════════════════════════════════════════ */
 const SectionSettings = () => {
-  const [appName, setAppName] = useState('ElevateAI');
+  const [appName, setAppName] = useState('VEYRA AI');
   const [maintenance, setMaintenance] = useState(false);
   const [jwtExpiry, setJwtExpiry] = useState(7);
   const [otpEnabled, setOtpEnabled] = useState(true);

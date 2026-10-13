@@ -21,6 +21,7 @@ import Analytics from './pages/Analytics/Analytics';
 import CodingPractice from './pages/CodingPractice/CodingPractice';
 import LandingPage from './pages/LandingPage';
 import SuspendedPage from './pages/SuspendedPage';
+import SmartResumeBuilder from './pages/Resume/SmartResumeBuilder';
 
 // Components
 import Sidebar from './components/Sidebar';
@@ -152,6 +153,7 @@ const App = () => {
                 <Route path="/aptitude/result/:id" element={<TestResult />} />
                 <Route path="/chat" element={<AIChatBot />} />
                 <Route path="/practice" element={<CodingPractice />} />
+                <Route path="/resume" element={<SmartResumeBuilder />} />
               </Route>
             </Route>
 

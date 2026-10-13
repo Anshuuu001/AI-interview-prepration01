@@ -3,18 +3,21 @@ import { useNavigate } from 'react-router-dom';
 import interviewService from '../../services/interviewService';
 import Card from '../../components/Card';
 import Button from '../../components/Button';
-import { Video, Calendar, Clock, Star, Play, Award, HelpCircle, ChevronRight, PlayCircle } from 'lucide-react';
+import { Video, Calendar, Clock, Star, Play, Award, HelpCircle, ChevronRight } from 'lucide-react';
 import { getScoreColor } from '../../utils/formatters';
 import { getTranslation } from '../../utils/translations';
+import Footer from '../../components/Footer';
 
 const InterviewDashboard = () => {
   const navigate = useNavigate();
   const [templates, setTemplates] = useState([]);
   const [history, setHistory] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const loadData = async () => {
       try {
+        setLoading(true);
         const tpls = await interviewService.getTemplates();
         setTemplates(tpls || []);
       } catch (err) {
@@ -25,6 +28,8 @@ const InterviewDashboard = () => {
         setHistory(hist || []);
       } catch (err) {
         console.error("Failed to load interview history:", err);
+      } finally {
+        setLoading(false);
       }
     };
     loadData();
@@ -35,28 +40,32 @@ const InterviewDashboard = () => {
   };
 
   return (
-    <div className="space-y-8 animate-fade-in-up relative z-10">
-      {/* Ambient background blobs */}
-      <div className="absolute top-20 right-10 w-96 h-96 bg-cognitive-primary/5 rounded-full blur-[100px] -z-10 pointer-events-none" />
-      <div className="absolute bottom-20 left-10 w-80 h-80 bg-cognitive-secondary/5 rounded-full blur-[100px] -z-10 pointer-events-none" />
-
-      <div>
-        <h2 className="text-3xl font-display font-extrabold text-slate-100 flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-cognitive-primary to-cognitive-secondary flex items-center justify-center shadow-lg shadow-cognitive-primary/20">
-            <Video className="w-5 h-5 text-white" />
-          </div>
-          {getTranslation('aiMockInterviewArena')}
-        </h2>
-        <p className="text-xs sm:text-sm text-slate-400 mt-1 max-w-2xl">
-          {getTranslation('mockInterviewArenaSub')}
+    <div className="space-y-8 animate-fade-in-up font-sans">
+      
+      {/* Page Header */}
+      <div className="space-y-2">
+        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold bg-[#DFE8F7] text-[#10194A] border border-[#C9D9F2]">
+          <Video className="w-3.5 h-3.5" />
+          <span>Interactive Simulation</span>
+        </div>
+        <h1 className="font-editorial text-3xl sm:text-4xl font-normal text-[#10194A] dark:text-[#FAF5EF]">
+          VEYRA Interview Coach
+        </h1>
+        <p className="text-sm text-[#666675] dark:text-[#C4C4D4] max-w-2xl">
+          Choose a role-specific interview profile to practice verbal and structured STAR responses under proctored real-time conditions with VEYRA AI.
         </p>
       </div>
 
       {/* Templates Section */}
       <div className="space-y-4">
-        <h3 className="text-xs font-display font-bold text-slate-400 uppercase tracking-widest">
-          {getTranslation('selectInterviewProfile')}
-        </h3>
+        <div className="flex items-center justify-between">
+          <h2 className="text-xs font-bold text-[#666675] dark:text-[#C4C4D4] uppercase tracking-wider">
+            Available Interview Profiles
+          </h2>
+          <span className="text-xs text-[#666675]">
+            {templates.filter(t => !t.isVideo).length} Profiles
+          </span>
+        </div>
         
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {templates.filter(t => !t.isVideo).map((tpl) => (
@@ -66,24 +75,23 @@ const InterviewDashboard = () => {
               title={tpl.title}
               subtitle={`${tpl.category} • ${tpl.difficulty}`}
               footer={
-                <div className="flex items-center justify-between w-full translate-z-10">
-                  <span className="text-xs text-slate-400 flex items-center gap-1">
-                    <HelpCircle className="w-4 h-4 text-cognitive-primary/80" />
-                    {tpl.questions.length} {getTranslation('questionsLabel')}
+                <div className="flex items-center justify-between w-full">
+                  <span className="text-xs text-[#666675] dark:text-[#C4C4D4] flex items-center gap-1.5 font-medium">
+                    <HelpCircle className="w-3.5 h-3.5 text-[#10194A] dark:text-[#EBA66F]" />
+                    {tpl.questions.length} Questions
                   </span>
                   <button
                     onClick={() => handleStartInterview(tpl.id)}
-                    className="px-4 py-2 bg-gradient-to-r from-cognitive-primary to-cognitive-secondary text-white text-xs font-bold rounded-xl shadow-lg shadow-cognitive-primary/25 hover:shadow-cognitive-primary/40 hover:-translate-y-0.5 active:translate-y-0 active:scale-95 transition-all flex items-center gap-1.5 group"
+                    className="px-4 py-2 bg-[#E97878] hover:bg-[#DC6666] text-white text-xs font-semibold rounded-xl shadow-xs hover:shadow transition-all duration-200 active:scale-95 flex items-center gap-1.5"
                   >
                     <Play className="w-3.5 h-3.5 fill-current" />
-                    <span>{getTranslation('startRound')}</span>
-                    <ChevronRight className="w-3 h-3 transition-transform group-hover:translate-x-0.5" />
+                    <span>Start Practice</span>
+                    <ChevronRight className="w-3.5 h-3.5" />
                   </button>
                 </div>
               }
-              className="glass-panel border border-slate-200/50 dark:border-white/5 relative overflow-hidden"
             >
-              <p className="text-xs sm:text-sm text-slate-400 dark:text-slate-300 leading-relaxed min-h-[50px] translate-z-20">
+              <p className="text-xs sm:text-sm text-[#666675] dark:text-[#C4C4D4] leading-relaxed min-h-[55px]">
                 {tpl.description}
               </p>
             </Card>
@@ -92,24 +100,29 @@ const InterviewDashboard = () => {
       </div>
 
       {/* History section */}
-      <div className="space-y-4">
-        <h3 className="text-xs font-display font-bold text-slate-400 uppercase tracking-widest">
-          {getTranslation('pastEvaluationReports')}
-        </h3>
+      <div className="space-y-4 pt-4">
+        <h2 className="text-xs font-bold text-[#666675] dark:text-[#C4C4D4] uppercase tracking-wider">
+          Previous Evaluation Reports
+        </h2>
         
         {history.filter(h => !templates.find(t => t.id === h.templateId)?.isVideo).length === 0 ? (
-          <Card className="text-center py-12 border border-slate-850">
-            <p className="text-sm text-slate-500">{getTranslation('noPastReports')}</p>
+          <Card className="text-center py-12">
+            <p className="text-sm text-[#666675]">No past evaluation reports found. Launch your first mock round above!</p>
           </Card>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {history.filter(h => !templates.find(t => t.id === h.templateId)?.isVideo).map((rep) => {
-              const scoreColor = getScoreColor(rep.overallScore);
+              const score = rep.overallScore || 0;
+              const scoreBadgeColor = score >= 80 
+                ? 'bg-[#27845B]/10 text-[#27845B] border-[#27845B]/20' 
+                : score >= 60 
+                  ? 'bg-[#B87924]/10 text-[#B87924] border-[#B87924]/20' 
+                  : 'bg-[#C44848]/10 text-[#C44848] border-[#C44848]/20';
+
               return (
                 <Card
                   key={rep.id}
                   hoverEffect
-                  className="glass-panel border border-slate-200/50 dark:border-white/5 border-l-4 dark:border-l-cognitive-primary border-l-cognitive-primary"
                   title={rep.roleTitle}
                   subtitle={new Date(rep.date).toLocaleDateString()}
                   actions={
@@ -117,33 +130,35 @@ const InterviewDashboard = () => {
                       size="sm"
                       variant="secondary"
                       onClick={() => navigate(`/interview/report/${rep.id}`)}
-                      className="rounded-xl translate-z-10"
+                      className="rounded-xl"
                     >
-                      {getTranslation('inspectReport')}
+                      Inspect Report
                     </Button>
                   }
                 >
-                  <div className="flex items-center justify-between gap-4 mt-2 translate-z-20">
-                    <div className="flex items-center gap-3">
-                      <div className="text-center">
-                        <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest">{getTranslation('overall')}</p>
-                        <p className={`text-xl font-extrabold mt-1 ${scoreColor.text}`}>{rep.overallScore}%</p>
+                  <div className="flex items-center justify-between gap-4 mt-2">
+                    <div className="flex items-center gap-4">
+                      <div>
+                        <p className="text-[10px] text-[#666675] font-bold uppercase tracking-wider">Overall</p>
+                        <span className={`inline-block px-2.5 py-0.5 mt-1 rounded-full text-xs font-bold border ${scoreBadgeColor}`}>
+                          {score}%
+                        </span>
                       </div>
-                      <div className="h-8 w-px bg-slate-200/20 dark:bg-slate-800" />
-                      <div className="text-center">
-                        <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest">{getTranslation('technical')}</p>
-                        <p className="text-sm font-extrabold text-slate-200 mt-1">{rep.technicalScore}%</p>
+                      <div className="h-8 w-px bg-[#E7E2DC] dark:bg-white/10" />
+                      <div>
+                        <p className="text-[10px] text-[#666675] font-bold uppercase tracking-wider">Technical</p>
+                        <p className="text-sm font-bold text-[#10194A] dark:text-[#FAF5EF] mt-1">{rep.technicalScore}%</p>
                       </div>
-                      <div className="h-8 w-px bg-slate-200/20 dark:bg-slate-800" />
-                      <div className="text-center">
-                        <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest">{getTranslation('behavioral')}</p>
-                        <p className="text-sm font-extrabold text-slate-200 mt-1">{rep.behavioralScore}%</p>
+                      <div className="h-8 w-px bg-[#E7E2DC] dark:bg-white/10" />
+                      <div>
+                        <p className="text-[10px] text-[#666675] font-bold uppercase tracking-wider">Behavioral</p>
+                        <p className="text-sm font-bold text-[#10194A] dark:text-[#FAF5EF] mt-1">{rep.behavioralScore}%</p>
                       </div>
                     </div>
 
-                    <div className="text-right text-xs text-slate-400 flex items-center gap-1">
-                      <Clock className="w-4 h-4 text-indigo-400" />
-                      <span>{Math.round(rep.duration / 60)} {getTranslation('minutesLabel')}</span>
+                    <div className="text-xs text-[#666675] flex items-center gap-1 font-medium">
+                      <Clock className="w-3.5 h-3.5 text-[#10194A] dark:text-[#DFE8F7]" />
+                      <span>{Math.round(rep.duration / 60)} mins</span>
                     </div>
                   </div>
                 </Card>
@@ -152,6 +167,8 @@ const InterviewDashboard = () => {
           </div>
         )}
       </div>
+
+      <Footer />
     </div>
   );
 };

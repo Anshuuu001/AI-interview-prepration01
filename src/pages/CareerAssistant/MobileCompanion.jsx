@@ -28,7 +28,7 @@ const MobileCompanion = () => {
           </div>
         </div>
         <p className="text-sm text-slate-300 font-bold">Scan to Login on Mobile</p>
-        <p className="text-[11px] text-slate-500">Open the ElevateAI mobile app and scan this QR code</p>
+        <p className="text-[11px] text-slate-500">Open the VEYRA AI mobile app and scan this QR code</p>
         <div className="flex justify-center gap-3">
           <button className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-slate-900 border border-white/10 text-xs font-semibold text-slate-300 hover:bg-slate-800 transition-colors">
             <Download className="w-4 h-4" /> App Store

@@ -72,7 +72,7 @@ export const NotificationProvider = ({ children }) => {
       if (list.length === 0) {
         list.push({
           id: 'welcome',
-          title: 'Welcome to ElevateAI!',
+          title: 'Welcome to VEYRA AI!',
           message: 'Your AI interview assistant is ready. Start your first Mock Interview or Aptitude Test today.',
           date: new Date().toISOString(),
           link: '/dashboard',

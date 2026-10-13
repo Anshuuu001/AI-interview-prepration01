@@ -12,68 +12,41 @@ const Card = ({
   className = '',
   ...props
 }) => {
-  const { designStyle } = useDesign();
-
-  // Determine base classes based on the GenUI style
-  let styleClasses = 'liquid-glass-card';
-  if (designStyle === 'minimal') styleClasses = 'minimal-surface';
-  if (designStyle === 'brutalist') styleClasses = 'brutalist-card';
-
   const cardContent = (
     <div
-      className={`${styleClasses} w-full ${className}`}
-      {...(!hoverEffect ? props : {})}
+      className={`bg-white dark:bg-[#131E54] border border-[#E7E2DC] dark:border-white/10 rounded-2xl shadow-[0_2px_8px_-2px_rgba(16,25,74,0.05)] transition-all duration-200 w-full overflow-hidden ${
+        hoverEffect ? 'hover:shadow-[0_8px_24px_-4px_rgba(16,25,74,0.08)] hover:border-[#D6CFCE]' : ''
+      } ${className}`}
+      {...props}
     >
-      {/* Glossy top sheen - liquid edge (only for glass mode) */}
-      {designStyle === 'glass' && (
-        <div className="absolute inset-0 pointer-events-none rounded-[inherit] overflow-hidden" style={{ zIndex: 0 }}>
-          <div style={{
-            position: 'absolute', top: 0, left: 0, right: 0, height: '60%',
-            background: 'linear-gradient(180deg, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0.03) 15%, transparent 100%)',
-            borderRadius: 'inherit',
-            boxShadow: 'inset 0 2px 4px rgba(255, 255, 255, 0.4)'
-          }} />
-        </div>
-      )}
-
       {/* Header */}
       {(title || subtitle || actions) && (
-        <div className="relative z-10 px-6 py-5 flex items-center justify-between gap-4"
-          style={{ borderBottom: '1px solid var(--card-border, rgba(255,255,255,0.05))' }}>
+        <div className="px-6 py-5 flex items-center justify-between gap-4 border-b border-[#E7E2DC] dark:border-white/10">
           <div>
             {title && (
-              <h3 className="text-lg font-bold text-slate-900 tracking-tight flex items-center gap-2">
+              <h3 className="text-base font-bold text-[#10194A] dark:text-[#FAF5EF] tracking-tight">
                 {title}
               </h3>
             )}
-            {subtitle && <p className="text-sm text-slate-600 mt-1 font-normal">{subtitle}</p>}
+            {subtitle && <p className="text-xs text-[#666675] dark:text-[#C4C4D4] mt-0.5 font-normal">{subtitle}</p>}
           </div>
           {actions && <div className="flex items-center gap-2">{actions}</div>}
         </div>
       )}
 
       {/* Body */}
-      <div className="relative z-10 p-6">
+      <div className="p-6">
         {children}
       </div>
 
       {/* Footer */}
       {footer && (
-        <div className="relative z-10 px-6 py-4 flex items-center justify-between"
-          style={{ borderTop: '1px solid var(--card-border, rgba(255,255,255,0.05))', background: 'rgba(255,255,255,0.01)' }}>
+        <div className="px-6 py-4 flex items-center justify-between border-t border-[#E7E2DC] dark:border-white/10 bg-[#FAF5EF]/50 dark:bg-white/[0.02]">
           {footer}
         </div>
       )}
     </div>
   );
-
-  if (hoverEffect) {
-    return (
-      <Tilt className="h-full w-full" scale={1.02} maxTilt={8} {...props}>
-        {cardContent}
-      </Tilt>
-    );
-  }
 
   return cardContent;
 };
