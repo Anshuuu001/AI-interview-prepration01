@@ -7,24 +7,24 @@
     "description": "Focuses on React components, lifecycle, hooks, state management, and performance.",
     "questions": [
       {
-        "id": "q-react-12",
-        "text": "What is the purpose of React.Profiler and how do you use it to identify bottlenecks?"
-      },
-      {
-        "id": "q-react-2",
-        "text": "How does React Virtual DOM work under the hood, and what are the main benefits?"
-      },
-      {
         "id": "q-react-5",
         "text": "Can you explain the concept of Higher-Order Components (HOC) and how they compare to custom hooks?"
       },
       {
-        "id": "q-react-13",
-        "text": "Explain the difference between Controlled and Uncontrolled inputs in React form management."
+        "id": "q-react-4",
+        "text": "What is the purpose of useEffect cleanups, and how do you prevent memory leaks when dealing with web socket subscriptions?"
       },
       {
-        "id": "q-react-15",
-        "text": "What are React Portals and when would you use them for modal overlays or dialog boxes?"
+        "id": "q-react-8",
+        "text": "Explain the React reconciliation process and the role of the \"key\" prop in lists."
+      },
+      {
+        "id": "q-react-14",
+        "text": "How do you implement code-splitting in React using dynamic imports and React.lazy?"
+      },
+      {
+        "id": "q-react-11",
+        "text": "Explain how React handles event delegation under the hood."
       }
     ]
   },
@@ -37,24 +37,24 @@
     "description": "Live video proctored interview assessing advanced React architecture, state management, and performance.",
     "questions": [
       {
-        "id": "q-vid-react-1",
-        "text": "How do you structure a large scale React application for maintainability?"
+        "id": "q-vid-react-10",
+        "text": "Explain the differences between client-side rendering (CSR) and static site generation (SSG) in React."
+      },
+      {
+        "id": "q-vid-react-5",
+        "text": "How do you handle routing and code splitting in a complex React SPA?"
       },
       {
         "id": "q-vid-react-8",
         "text": "What are the main differences between custom hooks and the render props pattern?"
       },
       {
-        "id": "q-vid-react-10",
-        "text": "Explain the differences between client-side rendering (CSR) and static site generation (SSG) in React."
+        "id": "q-vid-react-3",
+        "text": "What are some common security vulnerabilities in React applications and how do you mitigate them?"
       },
       {
-        "id": "q-vid-react-2",
-        "text": "Can you walk me through how you would implement server-side rendering in a React application?"
-      },
-      {
-        "id": "q-vid-react-9",
-        "text": "How would you handle theme switching dynamically using CSS variables and React Context API?"
+        "id": "q-vid-react-6",
+        "text": "Explain the concept of compound components in React and give a production example."
       }
     ]
   },
@@ -66,24 +66,24 @@
     "description": "Covers event loop, asynchronous design patterns, RESTful design, and security.",
     "questions": [
       {
-        "id": "q-node-14",
-        "text": "Explain how middleware execution order and flow control works in Express.js."
+        "id": "q-node-8",
+        "text": "What are the pros and cons of using GraphQL over REST for a Node.js backend?"
       },
       {
-        "id": "q-node-4",
-        "text": "What is your approach to handling transactions and concurrent updates in databases like MongoDB or PostgreSQL?"
+        "id": "q-node-14",
+        "text": "Explain how middleware execution order and flow control works in Express.js."
       },
       {
         "id": "q-node-13",
         "text": "How do you analyze a heap dump to debug memory leaks in a running Node.js process?"
       },
       {
-        "id": "q-node-10",
-        "text": "How does JWT authentication work, and how do you handle token revocation?"
+        "id": "q-node-4",
+        "text": "What is your approach to handling transactions and concurrent updates in databases like MongoDB or PostgreSQL?"
       },
       {
-        "id": "q-node-3",
-        "text": "Describe a scenario where you would use Streams in Node.js instead of standard file system buffer methods."
+        "id": "q-node-12",
+        "text": "What is the purpose of the cluster module and how does it scale applications across CPU cores?"
       }
     ]
   },
@@ -95,24 +95,24 @@
     "description": "General HR behavioral questions assessing cultural fit, conflict resolution, and leadership.",
     "questions": [
       {
+        "id": "q-hr-7",
+        "text": "How do you handle feedback or criticism from a peer code review?"
+      },
+      {
+        "id": "q-hr-5",
+        "text": "Tell me about a time you failed or made a significant mistake. How did you handle the aftermath?"
+      },
+      {
         "id": "q-hr-1",
         "text": "Tell me about a time when you had a conflict with a teammate or manager. How did you resolve it?"
       },
       {
-        "id": "q-hr-15",
-        "text": "What is your preference: working in a highly collaborative team or independently, and why?"
+        "id": "q-hr-10",
+        "text": "Describe a time when you had to explain a complex technical concept to a non-technical stakeholder."
       },
       {
-        "id": "q-hr-12",
-        "text": "How do you proactively stay updated with the latest technological developments and frameworks?"
-      },
-      {
-        "id": "q-hr-4",
-        "text": "Why do you want to join our company, and where do you see your career heading in the next 3 to 5 years?"
-      },
-      {
-        "id": "q-hr-2",
-        "text": "What is your greatest technical achievement, and what did you learn from the process?"
+        "id": "q-hr-9",
+        "text": "How do you balance technical debt with the pressure to deliver new features quickly?"
       }
     ]
   },
@@ -124,24 +124,24 @@
     "description": "Advanced systems architecture, scaling databases, caching strategy, microservices, and high-availability designs.",
     "questions": [
       {
+        "id": "q-sys-11",
+        "text": "Explain the difference between SQL and NoSQL databases. When do you use each architecture?"
+      },
+      {
+        "id": "q-sys-8",
+        "text": "What are the main differences between event-driven architecture and request-response architecture?"
+      },
+      {
+        "id": "q-sys-15",
+        "text": "How do you handle API versioning at scale without breaking client implementations?"
+      },
+      {
+        "id": "q-sys-1",
+        "text": "Design a highly-available, scalable notification system. How do you handle deduping and rate limiting?"
+      },
+      {
         "id": "q-sys-10",
         "text": "Describe your approach to database sharding vs replication. When would you use one over the other?"
-      },
-      {
-        "id": "q-sys-3",
-        "text": "How do you design a global content delivery caching layer, and how do you handle cache invalidation at scale?"
-      },
-      {
-        "id": "q-sys-2",
-        "text": "Explain the CAP theorem. In what scenarios would you choose AP (Availability-Partition) over CP (Consistency-Partition)?"
-      },
-      {
-        "id": "q-sys-6",
-        "text": "Explain how Consistent Hashing works and why it is useful in distributed caching or database sharding."
-      },
-      {
-        "id": "q-sys-5",
-        "text": "How would you architect a real-time collaborative document editor like Google Docs?"
       }
     ]
   },
@@ -154,24 +154,24 @@
     "description": "General behavioral and cultural fit questions for any role.",
     "questions": [
       {
-        "id": "v-hr-8",
-        "text": "Tell me about a time you had to learn a completely new skill very quickly."
-      },
-      {
-        "id": "v-hr-4",
-        "text": "Why are you leaving your current role?"
+        "id": "v-hr-10",
+        "text": "How do you manage professional pressure and tight production deadlines?"
       },
       {
         "id": "v-hr-1",
         "text": "Tell me about a time you handled a difficult situation with a coworker."
       },
       {
-        "id": "v-hr-10",
-        "text": "How do you manage professional pressure and tight production deadlines?"
+        "id": "v-hr-5",
+        "text": "Describe a time you showed leadership."
       },
       {
-        "id": "v-hr-9",
-        "text": "Why do you believe you are the best fit for this specific position?"
+        "id": "v-hr-3",
+        "text": "Where do you see yourself in 5 years?"
+      },
+      {
+        "id": "v-hr-7",
+        "text": "How do you handle differences of opinion when working inside a remote team?"
       }
     ]
   },
@@ -184,24 +184,24 @@
     "description": "Technical questions covering core Java, JVM, multithreading, and OOP.",
     "questions": [
       {
-        "id": "v-java-7",
-        "text": "What is the Java Reflection API and in what scenarios would you use it?"
-      },
-      {
-        "id": "v-java-1",
-        "text": "Explain the difference between JDK, JRE, and JVM."
+        "id": "v-java-3",
+        "text": "What is the difference between an abstract class and an interface?"
       },
       {
         "id": "v-java-6",
         "text": "Explain the difference between final, finally, and finalize keywords in Java."
       },
       {
-        "id": "v-java-4",
-        "text": "Explain the concept of multithreading in Java and how to create a thread."
+        "id": "v-java-2",
+        "text": "How does garbage collection work in Java?"
       },
       {
-        "id": "v-java-5",
-        "text": "What are the main differences between HashMap and ConcurrentHashMap?"
+        "id": "v-java-8",
+        "text": "Explain the difference between fail-fast and fail-safe iterators in collections."
+      },
+      {
+        "id": "v-java-1",
+        "text": "Explain the difference between JDK, JRE, and JVM."
       }
     ]
   },
@@ -218,20 +218,20 @@
         "text": "What is the static keyword used for in C variables and functions?"
       },
       {
-        "id": "v-c-1",
-        "text": "Explain the difference between malloc() and calloc()."
+        "id": "v-c-6",
+        "text": "Explain the differences between a struct and a union in C."
       },
       {
-        "id": "v-c-2",
-        "text": "What is a pointer to a pointer in C?"
-      },
-      {
-        "id": "v-c-3",
-        "text": "Describe how memory leaks occur in C and how to prevent them."
+        "id": "v-c-5",
+        "text": "Explain the difference between a macro and an inline function."
       },
       {
         "id": "v-c-4",
         "text": "What is the purpose of the volatile keyword?"
+      },
+      {
+        "id": "v-c-10",
+        "text": "Explain the purpose of the const keyword when used with pointer declarations."
       }
     ]
   },
@@ -244,24 +244,24 @@
     "description": "Python fundamentals, data structures, decorators, and memory management.",
     "questions": [
       {
-        "id": "v-py-1",
-        "text": "Explain the difference between a list and a tuple in Python."
-      },
-      {
-        "id": "v-py-3",
-        "text": "How do decorators work in Python?"
-      },
-      {
-        "id": "v-py-9",
-        "text": "What is the difference between *args and **kwargs in Python function definitions?"
-      },
-      {
         "id": "v-py-10",
         "text": "Explain how exception handling works with try-except-finally blocks."
       },
       {
-        "id": "v-py-8",
-        "text": "How do generators work in Python and why are they memory efficient?"
+        "id": "v-py-5",
+        "text": "How is memory managed in Python?"
+      },
+      {
+        "id": "v-py-1",
+        "text": "Explain the difference between a list and a tuple in Python."
+      },
+      {
+        "id": "v-py-2",
+        "text": "What is the Global Interpreter Lock (GIL)?"
+      },
+      {
+        "id": "v-py-9",
+        "text": "What is the difference between *args and **kwargs in Python function definitions?"
       }
     ]
   },
@@ -274,24 +274,24 @@
     "description": "HTML5 features, semantics, accessibility, and DOM structure.",
     "questions": [
       {
-        "id": "v-html-1",
-        "text": "What are semantic HTML elements and why are they important?"
-      },
-      {
-        "id": "v-html-2",
-        "text": "Explain the difference between block and inline elements."
+        "id": "v-html-6",
+        "text": "What is the difference between HTML and XHTML?"
       },
       {
         "id": "v-html-5",
         "text": "Explain the difference between local storage, session storage, and cookies."
       },
       {
-        "id": "v-html-8",
-        "text": "How do you use meta tags for SEO and responsive display viewport configuration?"
+        "id": "v-html-4",
+        "text": "What is the purpose of the data-* attribute?"
       },
       {
         "id": "v-html-7",
         "text": "Explain the purpose of SVG and Canvas in HTML5."
+      },
+      {
+        "id": "v-html-3",
+        "text": "How do you ensure a webpage is accessible for screen readers?"
       }
     ]
   },
@@ -304,24 +304,24 @@
     "description": "CSS Box Model, layout models (Flexbox/Grid), animations, and responsive design.",
     "questions": [
       {
-        "id": "v-css-8",
-        "text": "How do you implement CSS animations and transition keyframes?"
+        "id": "v-css-6",
+        "text": "Explain the difference between absolute, relative, fixed, and sticky positioning."
       },
       {
-        "id": "v-css-1",
-        "text": "Explain the CSS Box Model."
+        "id": "v-css-4",
+        "text": "What are pseudo-classes and pseudo-elements?"
       },
       {
-        "id": "v-css-10",
-        "text": "Explain the concept of z-index and stacking contexts in CSS."
+        "id": "v-css-3",
+        "text": "How does CSS specificity work?"
+      },
+      {
+        "id": "v-css-5",
+        "text": "Describe approaches to making a website responsive without media queries."
       },
       {
         "id": "v-css-9",
         "text": "What is a media query and how do you write responsive breakpoints?"
-      },
-      {
-        "id": "v-css-2",
-        "text": "What is the difference between Flexbox and CSS Grid?"
       }
     ]
   },
@@ -334,24 +334,24 @@
     "description": "Core JS concepts: closures, promises, event loop, and ES6+ features.",
     "questions": [
       {
+        "id": "v-js-1",
+        "text": "Explain closures in JavaScript and provide an example of when to use one."
+      },
+      {
+        "id": "v-js-8",
+        "text": "How do Promises work and how do they compare to Async/Await?"
+      },
+      {
+        "id": "v-js-10",
+        "text": "Explain the concept of event bubbling and event capturing."
+      },
+      {
+        "id": "v-js-2",
+        "text": "What is the difference between == and ===?"
+      },
+      {
         "id": "v-js-9",
         "text": "What is the difference between map, filter, and reduce array methods?"
-      },
-      {
-        "id": "v-js-5",
-        "text": "What is event bubbling and how can you stop it?"
-      },
-      {
-        "id": "v-js-4",
-        "text": "Explain the difference between let, const, and var."
-      },
-      {
-        "id": "v-js-3",
-        "text": "How does the event loop handle asynchronous operations?"
-      },
-      {
-        "id": "v-js-7",
-        "text": "What is prototype-based inheritance in JavaScript?"
       }
     ]
   },
@@ -364,24 +364,24 @@
     "description": "General web architecture, REST APIs, HTTP protocols, and security.",
     "questions": [
       {
+        "id": "v-web-4",
+        "text": "What happens when you type a URL into a browser and press enter?"
+      },
+      {
+        "id": "v-web-2",
+        "text": "What is a RESTful API and what are its core principles?"
+      },
+      {
         "id": "v-web-5",
         "text": "Explain how you would optimize a website for better performance."
       },
       {
-        "id": "v-web-1",
-        "text": "Explain the difference between HTTP and HTTPS."
+        "id": "v-web-10",
+        "text": "Explain the difference between WebSockets and long polling."
       },
       {
-        "id": "v-web-6",
-        "text": "What is DOM and how does browser render HTML pages?"
-      },
-      {
-        "id": "v-web-8",
-        "text": "How does client-side caching work using ETag and Cache-Control headers?"
-      },
-      {
-        "id": "v-web-4",
-        "text": "What happens when you type a URL into a browser and press enter?"
+        "id": "v-web-9",
+        "text": "What is DNS and how does it resolve domain names to IP addresses?"
       }
     ]
   },
@@ -394,8 +394,16 @@
     "description": "OAuth, JWTs, session management, and securing web applications.",
     "questions": [
       {
+        "id": "v-auth-8",
+        "text": "What is Session hijacking and how do you protect against it?"
+      },
+      {
         "id": "v-auth-1",
         "text": "Explain how JSON Web Tokens (JWT) work."
+      },
+      {
+        "id": "v-auth-9",
+        "text": "Explain the difference between OAuth2 and SAML."
       },
       {
         "id": "v-auth-2",
@@ -404,14 +412,6 @@
       {
         "id": "v-auth-6",
         "text": "What is single sign-on (SSO) and how does it work?"
-      },
-      {
-        "id": "v-auth-9",
-        "text": "Explain the difference between OAuth2 and SAML."
-      },
-      {
-        "id": "v-auth-4",
-        "text": "How do you securely store passwords in a database?"
       }
     ]
   }
