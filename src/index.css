@@ -14,151 +14,187 @@
 }
 
 /* ════════════════════════════════════════
-   LIGHT THEME — Cognitive Depth (Premium Studio Indigo)
+   PREMIUM SAAS DESIGN SYSTEM TOKENS
    ════════════════════════════════════════ */
 :root {
-  /* Editorial Warmth × Professional AI SaaS Tokens */
-  --color-navy: #10194A;
-  --color-navy-dark: #0B1133;
-  --color-ivory: #FAF5EF;
-  --color-surface: #FFFFFF;
-  --color-apricot: #EBA66F;
-  --color-coral: #E97878;
-  --color-mist: #DFE8F7;
-  --color-text-primary: #22243A;
-  --color-text-secondary: #666675;
-  --color-border: #E7E2DC;
-  --color-success: #27845B;
-  --color-warning: #B87924;
-  --color-error: #C44848;
+  /* Surfaces & Canvas (Light Theme) */
+  --app-bg: #F8F9FA;
+  --app-bg-color: #F8F9FA;
+  --surface: #FFFFFF;
+  --surface-dim: #F1F3F5;
+  --surface-muted: #E9ECEF;
+  --surface-card: #FFFFFF;
 
-  /* Tailwind Slate compatibility mapping to Editorial Tone */
-  --slate-50:  250, 245, 239;  /* #FAF5EF Ivory */
-  --slate-100: 242, 236, 228;  /* #F2ECE4 Ivory Dark */
-  --slate-200: 231, 226, 220;  /* #E7E2DC Border */
-  --slate-300: 216, 209, 201;  /* Soft Warm Gray */
-  --slate-400: 156, 154, 168;  /* Neutral Accent */
-  --slate-500: 102, 102, 117;  /* #666675 Secondary Text */
-  --slate-600: 75,  75,  95;   /* Deep Slate */
-  --slate-700: 46,  52,  88;   /* Dark Navy Slate */
-  --slate-800: 26,  37,  99;   /* #1A2563 Navy Light */
-  --slate-850: 16,  25,  74;   /* #10194A Primary Navy */
-  --slate-900: 16,  25,  74;   /* #10194A Primary Navy */
-  --slate-950: 11,  17,  51;   /* #0B1133 Navy Dark */
+  /* Text & Contrast (Light Theme - WCAG AAA & AA Compliant) */
+  --text-primary: #0F172A;
+  --text-secondary: #475569;
+  --text-muted: #64748B;
+  --on-surface: #0F172A;
+  --on-surface-variant: #475569;
 
-  /* Semantic UI Tokens */
+  /* Borders & Hairlines */
+  --border-subtle: rgba(0, 0, 0, 0.06);
+  --border-default: rgba(0, 0, 0, 0.1);
+  --border-strong: rgba(0, 0, 0, 0.2);
+  --outline: rgba(0, 0, 0, 0.08);
+  --outline-variant: rgba(0, 0, 0, 0.04);
+
+  /* Primary Brand & Restrained Accents */
   --primary: #10194A;
+  --primary-hover: #1A2563;
   --primary-container: #DFE8F7;
   --on-primary-container: #10194A;
-  --secondary: #E97878;
-  --secondary-container: #EBA66F;
-  --on-secondary-container: #10194A;
-  --surface: #FFFFFF;
-  --surface-dim: #FAF5EF;
-  --on-surface: #22243A;
-  --on-surface-variant: #666675;
-  --outline: #E7E2DC;
-  --outline-variant: #F2ECE4;
 
-  /* App Layout Surfaces */
-  --app-bg: #FAF5EF;
-  --app-bg-color: #FAF5EF;
-  
-  --sidebar-bg: #FFFFFF;
-  --sidebar-border: #E7E2DC;
-  
-  --navbar-bg: rgba(250, 245, 239, 0.94);
-  --navbar-border: #E7E2DC;
+  --secondary: #E97878;
+  --secondary-hover: #DC6666;
+  --secondary-container: #FCE8E8;
+  --on-secondary-container: #832727;
+
+  --accent-warm: #EBA66F;
+  --accent-mist: #DFE8F7;
+
+  /* Status Colors */
+  --color-success: #10B981;
+  --color-warning: #F59E0B;
+  --color-error: #EF4444;
+  --color-info: #3B82F6;
+
+  /* Navigation & Primitives Surfaces */
+  --sidebar-bg: #0E121B;
+  --sidebar-border: rgba(255, 255, 255, 0.08);
+  --navbar-bg: rgba(248, 249, 250, 0.92);
+  --navbar-border: rgba(0, 0, 0, 0.06);
   
   --card-bg: #FFFFFF;
-  --card-border: #E7E2DC;
-  --card-shadow: 0 2px 8px -2px rgba(16, 25, 74, 0.05), 0 1px 3px rgba(16, 25, 74, 0.03);
-  
-  --glass-bg: rgba(255, 255, 255, 0.9);
-  --glass-border: #E7E2DC;
-  --glass-shadow: 0 4px 16px -4px rgba(16, 25, 74, 0.06);
-  
-  /* Restrained Orbs / Ambient warmth */
-  --orb-1: rgba(235, 166, 111, 0.08); /* Soft Apricot */
-  --orb-2: rgba(223, 232, 247, 0.15); /* Mist Blue */
-  --orb-3: rgba(233, 120, 120, 0.05); /* Soft Coral */
-  --grid-color: rgba(16, 25, 74, 0.02);
-  
+  --card-border: rgba(0, 0, 0, 0.07);
+  --card-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.04), 0 1px 2px -1px rgba(0, 0, 0, 0.03);
+  --card-shadow-hover: 0 8px 24px -4px rgba(0, 0, 0, 0.08), 0 2px 6px -1px rgba(0, 0, 0, 0.04);
+
+  --glass-bg: rgba(255, 255, 255, 0.92);
+  --glass-border: rgba(0, 0, 0, 0.07);
+  --glass-shadow: 0 4px 16px -2px rgba(0, 0, 0, 0.06);
+
+  /* Restrained, Subtle Ambient Warmth */
+  --orb-1: rgba(235, 166, 111, 0.04);
+  --orb-2: rgba(223, 232, 247, 0.06);
+  --orb-3: rgba(233, 120, 120, 0.03);
+  --grid-color: rgba(15, 23, 42, 0.02);
+
   --bubble-ai-bg: #FFFFFF;
-  --bubble-ai-border: #E7E2DC;
-  --bubble-ai-text: #22243A;
-  
+  --bubble-ai-border: rgba(0, 0, 0, 0.08);
+  --bubble-ai-text: #0F172A;
+
   --input-bg: #FFFFFF;
-  --input-text: #22243A;
-  --quick-btn-bg: #FAF5EF;
-  
-  --scrollbar-track: #FAF5EF;
-  --scrollbar-thumb: #D8D1C9;
+  --input-text: #0F172A;
+  --input-border: rgba(0, 0, 0, 0.12);
+  --quick-btn-bg: #F8F9FA;
+
+  --scrollbar-track: #F8F9FA;
+  --scrollbar-thumb: #D1D5DB;
   --link-color: #E97878;
-  --metric-num-shadow: none;
-  
+
   --banner-bg: #FFFFFF;
-  --banner-border: #E7E2DC;
-  --banner-text: #10194A;
-  --banner-subtext: #666675;
+  --banner-border: rgba(0, 0, 0, 0.07);
+  --banner-text: #0F172A;
+  --banner-subtext: #475569;
+
+  /* Focus & Motion */
+  --focus-ring: #10194A;
+  --focus-ring-offset: #FFFFFF;
+  --ease-luxury: cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 /* ════════════════════════════════════════
-   DARK THEME — Refined Navy & Ivory
+   DARK THEME — Deep Obsidian / Luxury Charcoal
    ════════════════════════════════════════ */
 .dark {
-  --primary: #E97878;
-  --primary-container: #1A2563;
-  --on-primary-container: #FAF5EF;
-  --secondary: #EBA66F;
-  --secondary-container: #10194A;
-  --on-secondary-container: #DFE8F7;
-  --surface: #131E54;
-  --surface-dim: #0B1133;
-  --on-surface: #FAF5EF;
-  --on-surface-variant: #C4C4D4;
-  --outline: rgba(231, 226, 220, 0.14);
-  --outline-variant: rgba(231, 226, 220, 0.08);
+  /* Surfaces & Canvas (Dark Theme) */
+  --app-bg: #0A0D14;
+  --app-bg-color: #0A0D14;
+  --surface: #121620;
+  --surface-dim: #080A0F;
+  --surface-muted: #181D2A;
+  --surface-card: #121620;
 
-  --app-bg: #0B1133;
-  --app-bg-color: #0B1133;
+  /* Text & Contrast (Dark Theme) */
+  --text-primary: #F8FAFC;
+  --text-secondary: #94A3B8;
+  --text-muted: #64748B;
+  --on-surface: #F8FAFC;
+  --on-surface-variant: #94A3B8;
+
+  /* Borders & Hairlines */
+  --border-subtle: rgba(255, 255, 255, 0.08);
+  --border-default: rgba(255, 255, 255, 0.12);
+  --border-strong: rgba(255, 255, 255, 0.2);
+  --outline: rgba(255, 255, 255, 0.08);
+  --outline-variant: rgba(255, 255, 255, 0.04);
+
+  /* Primary Brand & Accents in Dark Mode */
+  --primary: #E97878;
+  --primary-hover: #F49D9D;
+  --primary-container: #1C2333;
+  --on-primary-container: #F8FAFC;
+
+  --secondary: #EBA66F;
+  --secondary-hover: #F5BE94;
+  --secondary-container: #221C16;
+  --on-secondary-container: #FDE8D8;
+
+  /* Navigation & Primitives Surfaces */
+  --sidebar-bg: #0E121B;
+  --sidebar-border: rgba(255, 255, 255, 0.08);
+  --navbar-bg: rgba(10, 13, 20, 0.92);
+  --navbar-border: rgba(255, 255, 255, 0.08);
   
-  --sidebar-bg: #10194A;
-  --sidebar-border: rgba(231, 226, 220, 0.12);
-  
-  --navbar-bg: rgba(16, 25, 74, 0.94);
-  --navbar-border: rgba(231, 226, 220, 0.12);
-  
-  --card-bg: #131E54;
-  --card-border: rgba(231, 226, 220, 0.12);
-  --card-shadow: 0 8px 24px 0 rgba(0, 0, 0, 0.35);
-  
-  --glass-bg: rgba(19, 30, 84, 0.85);
-  --glass-border: rgba(231, 226, 220, 0.14);
-  --glass-shadow: 0 8px 24px 0 rgba(0, 0, 0, 0.35);
-  
-  --orb-1: rgba(233, 120, 120, 0.08);
-  --orb-2: rgba(235, 166, 111, 0.08);
-  --orb-3: rgba(223, 232, 247, 0.06);
-  --grid-color: rgba(255, 255, 255, 0.02);
-  
-  --bubble-ai-bg: #182566;
-  --bubble-ai-border: rgba(231, 226, 220, 0.1);
-  --bubble-ai-text: #FAF5EF;
-  
-  --input-bg: #10194A;
-  --input-text: #FAF5EF;
-  --quick-btn-bg: #182566;
-  
-  --scrollbar-track: #0B1133;
+  --card-bg: #121620;
+  --card-border: rgba(255, 255, 255, 0.08);
+  --card-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.45);
+  --card-shadow-hover: 0 8px 30px -4px rgba(0, 0, 0, 0.6);
+
+  --glass-bg: rgba(18, 22, 32, 0.88);
+  --glass-border: rgba(255, 255, 255, 0.08);
+  --glass-shadow: 0 8px 24px 0 rgba(0, 0, 0, 0.45);
+
+  /* Restrained Ambient Obsidian Glow */
+  --orb-1: rgba(233, 120, 120, 0.03);
+  --orb-2: rgba(235, 166, 111, 0.03);
+  --orb-3: rgba(223, 232, 247, 0.02);
+  --grid-color: rgba(255, 255, 255, 0.015);
+
+  --bubble-ai-bg: #161B26;
+  --bubble-ai-border: rgba(255, 255, 255, 0.08);
+  --bubble-ai-text: #F8FAFC;
+
+  --input-bg: #161B26;
+  --input-text: #F8FAFC;
+  --input-border: rgba(255, 255, 255, 0.12);
+  --quick-btn-bg: #161B26;
+
+  --scrollbar-track: #0A0D14;
   --scrollbar-thumb: rgba(255, 255, 255, 0.15);
   --link-color: #EBA66F;
-  --metric-num-shadow: none;
-  
-  --banner-bg: #131E54;
-  --banner-border: rgba(231, 226, 220, 0.12);
-  --banner-text: #FAF5EF;
-  --banner-subtext: #C4C4D4;
+
+  --banner-bg: #121620;
+  --banner-border: rgba(255, 255, 255, 0.08);
+  --banner-text: #F8FAFC;
+  --banner-subtext: #94A3B8;
+
+  /* Focus & Motion */
+  --focus-ring: #93C5FD;
+  --focus-ring-offset: #0A0D14;
+}
+
+/* ════════════════════════════════════════
+   ACCESSIBILITY: PREFERS-REDUCED-MOTION
+   ════════════════════════════════════════ */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
 
 /* AI Glow Metrics Button */

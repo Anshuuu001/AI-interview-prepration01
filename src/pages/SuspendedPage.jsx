@@ -2,34 +2,48 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AlertOctagon, Clock, ShieldAlert } from 'lucide-react';
 import Card from '../components/Card';
+import { useAuth } from '../context/AuthContext';
 
 const SuspendedPage = () => {
   const navigate = useNavigate();
+  const { user } = useAuth();
   const [timeLeft, setTimeLeft] = useState(0);
 
   useEffect(() => {
-    const blockUntilStr = localStorage.getItem('proctoring_block_until');
+    const userBlockKey = user?.id ? `proctoring_block_until_${user.id}` : null;
+    const blockUntilStr = userBlockKey
+      ? localStorage.getItem(userBlockKey)
+      : localStorage.getItem('proctoring_block_until');
+
     if (!blockUntilStr) {
-      navigate('/dashboard');
+      navigate(user ? '/dashboard' : '/login', { replace: true });
       return;
     }
 
     const blockUntil = parseInt(blockUntilStr, 10);
+    if (isNaN(blockUntil) || Date.now() >= blockUntil) {
+      if (userBlockKey) localStorage.removeItem(userBlockKey);
+      localStorage.removeItem('proctoring_block_until');
+      navigate(user ? '/dashboard' : '/login', { replace: true });
+      return;
+    }
+
     const updateTimer = () => {
       const now = Date.now();
       const remaining = Math.max(0, Math.floor((blockUntil - now) / 1000));
       setTimeLeft(remaining);
 
       if (remaining <= 0) {
+        if (userBlockKey) localStorage.removeItem(userBlockKey);
         localStorage.removeItem('proctoring_block_until');
-        navigate('/dashboard');
+        navigate(user ? '/dashboard' : '/login', { replace: true });
       }
     };
 
     updateTimer();
     const interval = setInterval(updateTimer, 1000);
     return () => clearInterval(interval);
-  }, [navigate]);
+  }, [user, navigate]);
 
   const formatTime = (seconds) => {
     const m = Math.floor(seconds / 60);
@@ -45,18 +59,18 @@ const SuspendedPage = () => {
           <div className="absolute inset-0 border-2 border-rose-500/50 rounded-full animate-ping" />
         </div>
         
-        <h1 className="text-2xl font-bold text-white mb-3">Account Temporarily Suspended</h1>
+        <h1 className="text-2xl font-bold text-[#10194A] dark:text-white mb-3">Account Temporarily Suspended</h1>
         
-        <p className="text-slate-400 text-sm mb-6">
+        <p className="text-[#666675] dark:text-slate-400 text-sm mb-6">
           Your access to the VEYRA AI platform has been temporarily blocked due to repeated proctoring violations during your interview session.
         </p>
 
-        <div className="bg-slate-900/50 border border-slate-800 rounded-xl p-4 mb-8 flex items-center justify-center gap-3">
+        <div className="bg-[#FAF5EF] dark:bg-slate-900/50 border border-[#E7E2DC] dark:border-slate-800 rounded-xl p-4 mb-8 flex items-center justify-center gap-3">
           <Clock className="w-5 h-5 text-amber-500" />
-          <span className="text-lg font-mono font-bold text-amber-500">
+          <span className="text-lg font-mono font-bold text-amber-600 dark:text-amber-500">
             {formatTime(timeLeft)}
           </span>
-          <span className="text-sm font-semibold text-slate-300">Remaining</span>
+          <span className="text-sm font-semibold text-[#666675] dark:text-slate-300">Remaining</span>
         </div>
 
         <div className="flex items-start gap-3 text-left bg-rose-500/10 p-4 rounded-xl">

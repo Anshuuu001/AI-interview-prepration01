@@ -39,7 +39,7 @@ export const DesignProvider = ({ children }) => {
   return (
     <DesignContext.Provider value={{ designStyle, changeDesignStyle, theme, toggleTheme, setTheme }}>
       {/* Wrapper class */}
-      <div className={`design-theme-${designStyle} min-h-screen transition-all duration-500 bg-[#fdf6ee] dark:bg-[#060c29] text-[#0b1343] dark:text-[#fdf6ee]`}>
+      <div className={`design-theme-${designStyle} min-h-screen transition-colors duration-200 bg-[var(--app-bg)] text-[var(--text-primary)]`}>
         {children}
       </div>
     </DesignContext.Provider>

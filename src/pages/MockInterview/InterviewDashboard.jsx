@@ -146,12 +146,12 @@ const InterviewDashboard = () => {
                       </div>
                       <div className="h-8 w-px bg-[#E7E2DC] dark:bg-white/10" />
                       <div>
-                        <p className="text-[10px] text-[#666675] font-bold uppercase tracking-wider">Technical</p>
+                        <p className="text-[10px] text-[#666675] font-bold uppercase tracking-wider">Technical (Est.)</p>
                         <p className="text-sm font-bold text-[#10194A] dark:text-[#FAF5EF] mt-1">{rep.technicalScore}%</p>
                       </div>
                       <div className="h-8 w-px bg-[#E7E2DC] dark:bg-white/10" />
                       <div>
-                        <p className="text-[10px] text-[#666675] font-bold uppercase tracking-wider">Behavioral</p>
+                        <p className="text-[10px] text-[#666675] font-bold uppercase tracking-wider">Behavioral (Est.)</p>
                         <p className="text-sm font-bold text-[#10194A] dark:text-[#FAF5EF] mt-1">{rep.behavioralScore}%</p>
                       </div>
                     </div>

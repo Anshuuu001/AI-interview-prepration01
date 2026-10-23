@@ -112,14 +112,11 @@ export const useFaceDetection = (videoRef, active = false) => {
   };
 
   /**
-   * simulateFaceMatch scans and verifies the candidate's face matches the registration photo.
+   * Biometric photo-ID matching is not implemented in the client-side runtime.
+   * Genuine presence tracking is provided via BlazeFace (faceCount and getPresenceScore).
    */
   const simulateFaceMatch = async () => {
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        resolve({ matched: true, confidence: 98 });
-      }, 2500);
-    });
+    return { matched: false, confidence: 0, implemented: false, status: 'unavailable' };
   };
 
   return { 

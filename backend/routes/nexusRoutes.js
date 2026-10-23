@@ -19,8 +19,8 @@ router.post('/log-interaction', authMiddleware, logInteraction);
 router.post('/chat', authMiddleware, chatNexus);
 
 // Admin scopes
-router.get('/config', authMiddleware, getConfig);
-router.post('/config', authMiddleware, updateConfig);
+router.get('/config', authMiddleware, adminMiddleware, getConfig);
+router.post('/config', authMiddleware, adminMiddleware, updateConfig);
 router.get('/global-analytics', authMiddleware, adminMiddleware, getGlobalAnalytics);
 router.post('/fine-tune/simulate', authMiddleware, adminMiddleware, simulateFinetuning);
 

@@ -3,13 +3,11 @@ const fs = require('fs');
 const path = require('path');
 
 const MODELS_TO_TRY = [
-  { version: 'v1beta', model: 'gemini-2.0-flash' },
-  { version: 'v1beta', model: 'gemini-1.5-flash' },
-  { version: 'v1beta', model: 'gemini-1.5-pro' },
-  { version: 'v1beta', model: 'gemini-flash-latest' },
-  { version: 'v1beta', model: 'gemini-3.5-flash' },
   { version: 'v1beta', model: 'gemini-2.5-flash' },
-  { version: 'v1beta', model: 'gemini-2.5-pro' }
+  { version: 'v1beta', model: 'gemini-2.5-pro' },
+  { version: 'v1beta', model: 'gemini-3.8-flash' },
+  { version: 'v1beta', model: 'gemini-flash-latest' },
+  { version: 'v1beta', model: 'gemini-2.0-flash' }
 ];
 
 const callGeminiApi = async ({ history, systemInstruction, customKey }) => {

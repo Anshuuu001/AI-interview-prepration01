@@ -528,7 +528,7 @@ const SectionSecurityControl = () => {
   const [settings, setSettings] = useState({
     maxWarnings: 5, lockTime: 30, suspensionTime: 60,
     allowedDevices: 2, requireFullscreen: true, faceDetection: true,
-    gazeTracking: true, allowedBrowsers: ['Chrome', 'Firefox'],
+    gazeTracking: false, allowedBrowsers: ['Chrome', 'Firefox'],
   });
 
   return (
@@ -561,7 +561,7 @@ const SectionSecurityControl = () => {
           <div className="space-y-4">
             <Toggle value={settings.requireFullscreen} onChange={v => setSettings(p => ({ ...p, requireFullscreen: v }))} label="Require Fullscreen Mode" />
             <Toggle value={settings.faceDetection} onChange={v => setSettings(p => ({ ...p, faceDetection: v }))} label="Face Detection (BlazeFace)" />
-            <Toggle value={settings.gazeTracking} onChange={v => setSettings(p => ({ ...p, gazeTracking: v }))} label="Gaze / Eye Tracking" />
+            <Toggle value={settings.gazeTracking} onChange={v => setSettings(p => ({ ...p, gazeTracking: v }))} label="Gaze / Eye Tracking (Not Implemented)" />
           </div>
           <div className="mt-5 pt-5" style={{ borderTop: '1px solid rgba(255,255,255,0.06)' }}>
             <p className="text-xs text-slate-400 mb-3">Allowed Browsers</p>

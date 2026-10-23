@@ -3,7 +3,7 @@
     "id": "1",
     "name": "Alex Johnson",
     "email": "student@elevateai.com",
-    "password": "password123",
+    "password": "$2b$10$J.YpqDQzZskPgT9N3OSQ/OXL.d6/s/ImE8EXCT9VbAZL5UfRxoy9i",
     "role": "student",
     "title": "Full Stack Engineer Intern",
     "skills": [
@@ -91,7 +91,7 @@
     "id": "2",
     "name": "Admin user",
     "email": "admin@elevateai.com",
-    "password": "admin",
+    "password": "$2b$10$5IlnevbuSU14kVQsmivBW.2el7xabeSdeuolJvIneJ.sNxSn/vi2G",
     "role": "admin",
     "title": "Head of Talent Acquisition",
     "skills": [

@@ -528,7 +528,7 @@ Your response MUST be a single valid raw JSON object matching this structure exa
     integrityScore,
     warningsCount,
     cheatingRisk,
-    feedback: `Gemini AI Evaluation — Score: ${overallScore}%. Integrity Score: ${integrityScore}% (${cheatingRisk} risk).`,
+    feedback: `Gemini AI Evaluation — Score: ${overallScore}%. Integrity Score: ${integrityScore}% (${cheatingRisk} risk). Technical and behavioral scores are derived estimates.`,
     qaList: evaluatedQaList
   };
 

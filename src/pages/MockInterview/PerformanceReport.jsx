@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import interviewService from '../../services/interviewService';
 import Card from '../../components/Card';
 import Button from '../../components/Button';
@@ -23,25 +23,38 @@ import Footer from '../../components/Footer';
 const PerformanceReport = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const [report, setReport] = useState(null);
+  const location = useLocation();
+  const [report, setReport] = useState(() => {
+    if (location.state?.report && location.state.report.id === id) {
+      return location.state.report;
+    }
+    return null;
+  });
 
   useEffect(() => {
+    if (report && report.id === id) return;
+
+    let isMounted = true;
     const loadReport = async () => {
       try {
         const history = await interviewService.getPastInterviews();
         const found = (history || []).find(r => r.id === id);
+        if (!isMounted) return;
         if (!found) {
           navigate('/interview');
           return;
         }
         setReport(found);
       } catch (err) {
+        if (!isMounted) return;
         console.error("Failed to load interview report:", err);
         navigate('/interview');
       }
     };
     loadReport();
-  }, [id, navigate]);
+
+    return () => { isMounted = false; };
+  }, [id, navigate, report]);
 
   if (!report) return <Loader message={getTranslation('loadingGradingDashboard')} />;
 
@@ -109,7 +122,10 @@ const PerformanceReport = () => {
 
         {/* Technical Score Card */}
         <div className="bg-white dark:bg-[#131E54] p-5 rounded-2xl border border-[#E7E2DC] dark:border-white/10 text-center shadow-xs flex flex-col justify-between">
-          <p className="text-[11px] font-bold text-[#666675] uppercase tracking-wider mb-2">Technical Depth</p>
+          <div>
+            <p className="text-[11px] font-bold text-[#666675] uppercase tracking-wider">Technical Depth</p>
+            <span className="text-[9px] text-[#8E8E9F] block mb-1 font-medium">(Derived Estimate)</span>
+          </div>
           <div className="text-3xl font-bold text-[#10194A] dark:text-[#FAF5EF] mb-2">{report.technicalScore || 0}%</div>
           <div className="w-full bg-[#FAF5EF] dark:bg-white/10 h-1.5 rounded-full overflow-hidden">
             <div className="h-full bg-[#10194A] dark:bg-[#DFE8F7] rounded-full" style={{ width: `${report.technicalScore || 0}%` }} />
@@ -118,7 +134,10 @@ const PerformanceReport = () => {
 
         {/* Behavioral Score Card */}
         <div className="bg-white dark:bg-[#131E54] p-5 rounded-2xl border border-[#E7E2DC] dark:border-white/10 text-center shadow-xs flex flex-col justify-between">
-          <p className="text-[11px] font-bold text-[#666675] uppercase tracking-wider mb-2">STAR Structure</p>
+          <div>
+            <p className="text-[11px] font-bold text-[#666675] uppercase tracking-wider">STAR Structure</p>
+            <span className="text-[9px] text-[#8E8E9F] block mb-1 font-medium">(Derived Estimate)</span>
+          </div>
           <div className="text-3xl font-bold text-[#10194A] dark:text-[#FAF5EF] mb-2">{report.behavioralScore || 0}%</div>
           <div className="w-full bg-[#FAF5EF] dark:bg-white/10 h-1.5 rounded-full overflow-hidden">
             <div className="h-full bg-[#EBA66F] rounded-full" style={{ width: `${report.behavioralScore || 0}%` }} />

@@ -4,9 +4,10 @@ import interviewService from '../../services/interviewService';
 import { useNotifications } from '../../hooks/useNotifications';
 import Card from '../../components/Card';
 import Button from '../../components/Button';
+import Loader from '../../components/Loader';
 import AntiCheatOverlay from '../../components/AntiCheatOverlay';
 import useAntiCheat from '../../hooks/useAntiCheat';
-import { ClipboardList, Clock, Check, ArrowLeft, ArrowRight, RefreshCw, BookOpen, HelpCircle } from 'lucide-react';
+import { ClipboardList, Clock, Check, ArrowLeft, ArrowRight, RefreshCw, BookOpen, HelpCircle, AlertCircle } from 'lucide-react';
 import { formatDuration } from '../../utils/formatters';
 import { getTranslation } from '../../utils/translations';
 
@@ -23,9 +24,11 @@ const AptitudeTest = () => {
   const [answers, setAnswers] = useState({}); // { questionId: selectedOptionIndex }
   const [testQuestions, setTestQuestions] = useState([]);
   
-  // Timer state
+  // Timer and submission state
   const [timeRemaining, setTimeRemaining] = useState(300);
   const [secondsSpent, setSecondsSpent] = useState(0);
+  const [submitting, setSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState(null);
   const timerRef = useRef(null);
 
   // Anti-cheat: active only during live test
@@ -100,8 +103,10 @@ const AptitudeTest = () => {
     }
   };
 
-  const submitAnswers = () => {
+  const submitAnswers = async () => {
     if (timerRef.current) clearInterval(timerRef.current);
+    setSubmitting(true);
+    setSubmitError(null);
     
     let correctCount = 0;
     const details = testQuestions.map(q => {
@@ -133,18 +138,25 @@ const AptitudeTest = () => {
       details
     };
 
-    interviewService.saveTestResult(testResult);
-    
-    // Trigger a live notification
-    addNotification({
-      title: 'Aptitude Test Graded',
-      message: `You scored ${percentage}% in your ${selectedCategory === 'All' ? 'All Subjects' : selectedCategory} aptitude quiz.`,
-      type: 'aptitude',
-      link: `/aptitude/result/${testResult.id}`
-    });
+    try {
+      await interviewService.saveTestResult(testResult);
+      
+      // Trigger a live notification
+      addNotification({
+        title: 'Aptitude Test Graded',
+        message: `You scored ${percentage}% in your ${selectedCategory === 'All' ? 'All Subjects' : selectedCategory} aptitude quiz.`,
+        type: 'aptitude',
+        link: `/aptitude/result/${testResult.id}`
+      });
 
-    setTestActive(false);
-    navigate(`/aptitude/result/${testResult.id}`);
+      setTestActive(false);
+      navigate(`/aptitude/result/${testResult.id}`, { state: { result: testResult } });
+    } catch (err) {
+      console.error("Failed to save aptitude test result:", err);
+      setSubmitting(false);
+      const errMsg = err.response?.data?.error || err.message || 'Failed to submit test results to server. Please try submitting again.';
+      setSubmitError(errMsg);
+    }
   };
 
   useEffect(() => {
@@ -159,6 +171,16 @@ const AptitudeTest = () => {
     };
   }, []);
 
+  if (submitting) {
+    return (
+      <div className="max-w-xl mx-auto py-16 text-center">
+        <Card className="p-8">
+          <Loader message="Submitting and grading your assessment..." size="lg" />
+        </Card>
+      </div>
+    );
+  }
+
   if (testActive) {
     const currentQ = testQuestions[activeIdx];
     const answeredCount = Object.keys(answers).length;
@@ -172,6 +194,28 @@ const AptitudeTest = () => {
           warningCount={warningCount}
           onDismiss={dismiss}
         />
+
+        {/* Submit Error Banner */}
+        {submitError && (
+          <div className="p-4 rounded-xl bg-[#C44848]/10 border border-[#C44848]/30 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-xs text-[#C44848]">
+            <div className="flex items-start gap-2.5">
+              <AlertCircle className="w-4 h-4 flex-shrink-0 mt-0.5 text-[#C44848]" />
+              <div>
+                <p className="font-bold">Submission Failed</p>
+                <p className="mt-0.5 text-[#666675] dark:text-[#C4C4D4]">{submitError}</p>
+                <p className="mt-0.5 text-[11px] text-[#666675] dark:text-[#C4C4D4]">Your answers are safe. Please click Retry to submit again.</p>
+              </div>
+            </div>
+            <button
+              type="button"
+              onClick={submitAnswers}
+              className="px-4 py-2 rounded-xl bg-[#C44848] text-white font-semibold text-xs hover:bg-[#AA3737] transition-all flex-shrink-0 self-end sm:self-center"
+            >
+              Retry Submit
+            </button>
+          </div>
+        )}
+
         {/* Test top bar */}
         <div className="flex items-center justify-between">
           <div>

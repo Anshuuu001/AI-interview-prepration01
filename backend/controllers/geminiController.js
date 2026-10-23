@@ -2,7 +2,19 @@ const { callGeminiApi } = require('../utils/geminiHelper');
 
 const askGemini = async (req, res) => {
   let { history, systemInstruction } = req.body;
+  if (history && !Array.isArray(history)) {
+    return res.status(400).json({ error: 'History must be an array of messages' });
+  }
   history = Array.isArray(history) ? history : [];
+  if (history.length > 60) {
+    return res.status(400).json({ error: 'History exceeds maximum allowed conversation length (60 messages)' });
+  }
+  if (systemInstruction && typeof systemInstruction !== 'string') {
+    return res.status(400).json({ error: 'System instruction must be a string' });
+  }
+  if (systemInstruction && systemInstruction.length > 10000) {
+    return res.status(400).json({ error: 'System instruction exceeds maximum allowed length' });
+  }
   const customKey = req.headers['x-gemini-key'];
 
   let lastError = null;

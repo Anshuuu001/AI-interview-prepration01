@@ -41,17 +41,17 @@ const Sidebar = ({ isOpen, onClose }) => {
         to={link.to}
         onClick={() => onClose && onClose()}
         className={({ isActive }) =>
-          `flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium transition-all duration-150 font-sans group ${
+          `flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium transition-all duration-150 font-sans group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--focus-ring)] ${
             isActive
-              ? 'bg-white/10 text-[#FAF5EF] font-semibold border-l-3 border-[#E97878] pl-3 shadow-xs'
-              : 'text-[#DFE8F7]/75 hover:text-[#FAF5EF] hover:bg-white/5'
+              ? 'bg-white/[0.08] text-[#F8FAFC] font-semibold border-l-2 border-[#E97878] pl-3 shadow-xs'
+              : 'text-[#94A3B8] hover:text-[#F8FAFC] hover:bg-white/[0.04]'
           }`
         }
       >
         {({ isActive }) => (
           <>
             <link.icon className={`w-4 h-4 transition-colors ${
-              isActive ? 'text-[#EBA66F]' : 'text-[#DFE8F7]/60 group-hover:text-[#FAF5EF]'
+              isActive ? 'text-[#EBA66F]' : 'text-[#64748B] group-hover:text-[#F8FAFC]'
             }`} />
             <span className="truncate">{link.label}</span>
             {isActive && (
@@ -68,18 +68,18 @@ const Sidebar = ({ isOpen, onClose }) => {
       {isOpen && (
         <div
           onClick={onClose}
-          className="fixed inset-0 z-40 bg-[#10194A]/70 backdrop-blur-xs lg:hidden"
+          className="fixed inset-0 z-40 bg-black/60 backdrop-blur-xs lg:hidden"
         />
       )}
 
-      {/* Sidebar - Deep Navy Brand Element */}
+      {/* Sidebar - Deep Obsidian Luxury Element */}
       <aside
-        className={`fixed top-0 bottom-0 left-0 z-40 w-64 flex flex-col bg-[#10194A] text-[#FAF5EF] border-r border-[#10194A]/40 shadow-xl transition-transform duration-300 lg:translate-x-0 ${
+        className={`fixed top-0 bottom-0 left-0 z-40 w-64 flex flex-col bg-[#0E121B] text-[#F8FAFC] border-r border-white/[0.08] shadow-xl transition-transform duration-300 lg:translate-x-0 ${
           isOpen ? 'translate-x-0' : '-translate-x-full'
         }`}
       >
         {/* Logo Header */}
-        <div className="h-16 flex items-center justify-between px-5 flex-shrink-0 border-b border-white/10">
+        <div className="h-16 flex items-center justify-between px-5 flex-shrink-0 border-b border-white/[0.08]">
           <div className="flex items-center gap-3 cursor-pointer" onClick={() => navigate('/dashboard')}>
             <img 
               src="/veyra-logo.png" 
@@ -87,7 +87,7 @@ const Sidebar = ({ isOpen, onClose }) => {
               className="w-9 h-9 object-contain rounded-lg bg-white/5 p-0.5 border border-white/10 shadow-xs" 
             />
             <div>
-              <span className="font-editorial text-lg font-bold tracking-tight text-[#FAF5EF]">
+              <span className="font-editorial text-lg font-bold tracking-tight text-[#F8FAFC]">
                 VEYRA AI
               </span>
               <p className="text-[9px] text-[#EBA66F] font-sans tracking-wider uppercase font-semibold -mt-1">
@@ -98,7 +98,7 @@ const Sidebar = ({ isOpen, onClose }) => {
           {onClose && (
             <button
               onClick={onClose}
-              className="p-1.5 rounded-lg text-white/60 hover:text-white hover:bg-white/10 lg:hidden transition-colors"
+              className="p-1.5 rounded-lg text-white/60 hover:text-white hover:bg-white/10 lg:hidden transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--focus-ring)]"
             >
               <X className="w-4 h-4" />
             </button>
@@ -109,15 +109,15 @@ const Sidebar = ({ isOpen, onClose }) => {
         <div className="flex-1 overflow-y-auto px-3.5 py-5 space-y-6">
           {/* Candidate Section */}
           <div className="space-y-1">
-            <p className="px-3 text-[10px] font-sans font-bold text-[#DFE8F7]/45 uppercase tracking-widest mb-2">
+            <p className="px-3 text-[10px] font-sans font-bold text-slate-500 uppercase tracking-widest mb-2">
               {getTranslation('candidatePortal')}
             </p>
             {renderLinks(candidateLinks)}
           </div>
 
           {user?.role === 'admin' && (
-            <div className="space-y-1 pt-4 border-t border-white/10">
-              <p className="px-3 text-[10px] font-sans font-bold text-[#DFE8F7]/45 uppercase tracking-widest mb-2">
+            <div className="space-y-1 pt-4 border-t border-white/[0.08]">
+              <p className="px-3 text-[10px] font-sans font-bold text-slate-500 uppercase tracking-widest mb-2">
                 {getTranslation('administration')}
               </p>
               {renderLinks(adminLinks)}
@@ -126,20 +126,20 @@ const Sidebar = ({ isOpen, onClose }) => {
         </div>
 
         {/* User Footer */}
-        <div className="p-4 flex-shrink-0 border-t border-white/10 bg-[#0B1133]/50">
-          <div className="flex items-center gap-3 p-2.5 rounded-xl mb-3 bg-white/5 border border-white/10">
+        <div className="p-4 flex-shrink-0 border-t border-white/[0.08] bg-[#0A0D14]/70">
+          <div className="flex items-center gap-3 p-2.5 rounded-xl mb-3 bg-white/[0.04] border border-white/[0.08]">
             <div className="w-8 h-8 rounded-lg bg-[#DFE8F7] text-[#10194A] flex items-center justify-center font-bold text-xs flex-shrink-0">
               {user?.name?.charAt(0) || 'U'}
             </div>
             <div className="flex-1 min-w-0 font-sans">
-              <p className="text-xs font-semibold text-[#FAF5EF] truncate">{user?.name || 'Guest'}</p>
-              <p className="text-[10px] text-[#DFE8F7]/60 capitalize truncate">{user?.role || 'Student'}</p>
+              <p className="text-xs font-semibold text-[#F8FAFC] truncate">{user?.name || 'Guest'}</p>
+              <p className="text-[10px] text-slate-400 capitalize truncate">{user?.role || 'Student'}</p>
             </div>
           </div>
 
           <button
             onClick={handleLogout}
-            className="w-full flex items-center justify-center gap-2 px-3 py-2 rounded-xl text-xs font-semibold transition-colors bg-white/5 hover:bg-[#C44848]/20 text-[#DFE8F7]/80 hover:text-[#F4A5A5] border border-white/10 group"
+            className="w-full flex items-center justify-center gap-2 px-3 py-2 rounded-xl text-xs font-semibold transition-colors bg-white/[0.04] hover:bg-rose-500/20 text-slate-300 hover:text-rose-300 border border-white/[0.08] group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--focus-ring)]"
           >
             <LogOut className="w-3.5 h-3.5" />
             {getTranslation('signOut')}

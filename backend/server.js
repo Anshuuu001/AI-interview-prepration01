@@ -15,6 +15,9 @@ const nexusRoutes = require('./routes/nexusRoutes');
 const app = express();
 const PORT = process.env.PORT || 8080;
 
+// Security: Do not trust arbitrary client X-Forwarded-For headers unless behind an explicit proxy
+app.set('trust proxy', false);
+
 // Security: HTTP headers protection
 app.use(helmet());
 
@@ -78,7 +81,9 @@ app.get('/.well-known/appspecific/com.chrome.devtools.json', (req, res) => {
 // eslint-disable-next-line no-unused-vars
 app.use((err, req, res, next) => {
   console.error('[Unhandled Error]', err.message);
-  res.status(500).json({ error: err.message || 'Internal server error' });
+  const isProd = process.env.NODE_ENV === 'production' || process.env.APP_ENV === 'production';
+  const safeMessage = isProd ? 'Internal server error' : (err.message || 'Internal server error');
+  res.status(err.status || 500).json({ error: safeMessage });
 });
 
 

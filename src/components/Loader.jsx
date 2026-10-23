@@ -18,16 +18,16 @@ const Loader = ({
         <div className={`absolute rounded-full border border-primary-500/30 animate-ping opacity-75 ${sizeClasses[size]}`} />
         
         {/* Middle spinning gradient ring */}
-        <div className={`rounded-full border-4 border-slate-800 border-t-primary-500 animate-spin ${sizeClasses[size]}`} />
+        <div className={`rounded-full border-4 border-black/10 dark:border-white/10 border-t-[#E97878] animate-spin ${sizeClasses[size]}`} />
 
         {/* Inner static AI brain glow */}
-        <div className="absolute w-4 h-4 rounded-full bg-primary-400 blur-[2px] animate-pulse" />
+        <div className="absolute w-3 h-3 rounded-full bg-[#E97878]/80 blur-[2px] animate-pulse" />
       </div>
       
       {message && (
         <div className="mt-6">
-          <p className="text-sm font-medium text-slate-300 animate-pulse tracking-wide">{message}</p>
-          <p className="text-xs text-slate-500 mt-1">Please do not refresh or close this tab</p>
+          <p className="text-sm font-medium text-slate-800 dark:text-slate-100 animate-pulse tracking-wide">{message}</p>
+          <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">Please do not refresh or close this tab</p>
         </div>
       )}
     </div>
@@ -35,8 +35,8 @@ const Loader = ({
 
   if (fullPage) {
     return (
-      <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/80 backdrop-blur-md">
-        <div className="glass-panel p-8 rounded-2xl max-w-sm mx-4">
+      <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 dark:bg-black/70 backdrop-blur-md">
+        <div className="bg-white/95 dark:bg-[#121620] border border-black/10 dark:border-white/10 shadow-2xl p-8 rounded-2xl max-w-sm mx-4">
           {loaderContent}
         </div>
       </div>

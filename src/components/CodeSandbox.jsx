@@ -40,6 +40,7 @@ const CodeSandbox = ({ initialCode = '', language = 'javascript', onChange }) =>
   const [code, setCode] = useState(initialCode || LANGUAGE_TEMPLATES[language] || LANGUAGE_TEMPLATES.javascript);
   const [output, setOutput] = useState('');
   const [isCompiling, setIsCompiling] = useState(false);
+  const [isSimulated, setIsSimulated] = useState(false);
   
   // AI Sandbox Features State
   const [antigravityMode, setAntigravityMode] = useState(false);
@@ -178,6 +179,7 @@ const CodeSandbox = ({ initialCode = '', language = 'javascript', onChange }) =>
     try {
       // If HTML language selected, run in frontend preview
       if (selectedLanguage === 'html') {
+        setIsSimulated(false);
         setOutput(code);
         setEnergy(prev => Math.min(100, prev + 25)); // Reward points
         setIsCompiling(false);
@@ -187,6 +189,7 @@ const CodeSandbox = ({ initialCode = '', language = 'javascript', onChange }) =>
 
       // If Antigravity Humor mode is ON, simulate funny AI error handler
       if (antigravityMode) {
+        setIsSimulated(true);
         setOutput('SyntaxError: Unexpected token... calling Antigravity AI 🌌');
         const friendlyError = await askGemini(`User's code has an error:\n${code}`, ANTIGRAVITY_ERROR_PROMPT);
         setOutput(`❌ Simulated Error\n\n🌌 ANTIGRAVITY SAYS:\n${friendlyError}`);
@@ -196,9 +199,13 @@ const CodeSandbox = ({ initialCode = '', language = 'javascript', onChange }) =>
 
       // Call our Piston execution proxy backend
       const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8080/api';
+      const token = localStorage.getItem('token');
       const response = await fetch(`${API_URL}/sandbox/run`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 
+          'Content-Type': 'application/json',
+          ...(token ? { 'Authorization': `Bearer ${token}` } : {})
+        },
         body: JSON.stringify({ code, language: selectedLanguage })
       });
 
@@ -208,6 +215,7 @@ const CodeSandbox = ({ initialCode = '', language = 'javascript', onChange }) =>
       }
 
       const runResult = await response.json();
+      setIsSimulated(false);
       
       if (runResult.stderr) {
         setOutput(`❌ Compilation/Runtime Error:\n\n${runResult.stderr}`);
@@ -226,8 +234,14 @@ const CodeSandbox = ({ initialCode = '', language = 'javascript', onChange }) =>
       // Fallback to Gemini simulator if backend compiler is unreachable
       try {
         const executionOutput = await askGemini(code, CODE_EXECUTION_PROMPT);
-        setOutput(executionOutput);
+        setIsSimulated(true);
+        setOutput(
+          `[AI-SIMULATED OUTPUT]\n` +
+          `Notice: Isolated container sandbox is currently unavailable. This output was predicted by Gemini AI and was NOT executed or compiled in an isolated runtime.\n\n` +
+          `${executionOutput}`
+        );
       } catch (geminiErr) {
+        setIsSimulated(false);
         setOutput(`❌ Sandbox Error executing code:\n${geminiErr.message}`);
       }
     } finally {
@@ -708,7 +722,7 @@ const CodeSandbox = ({ initialCode = '', language = 'javascript', onChange }) =>
       <div className="flex flex-wrap items-center justify-between p-3 border-b border-slate-700 dark:border-white/10 bg-slate-800/80 dark:bg-slate-900/50 backdrop-blur-md z-10 gap-2">
         <div className="flex items-center gap-2 text-xs font-display font-bold text-white/80 uppercase tracking-wider min-w-fit">
           <Code2 className="w-4 h-4 text-cognitive-primary" />
-          Isolated {selectedLanguage} Sandbox
+          {selectedLanguage} Sandbox {isSimulated ? '(AI-Simulated)' : ''}
         </div>
 
         {/* Dynamic Selectors */}
@@ -910,9 +924,25 @@ const CodeSandbox = ({ initialCode = '', language = 'javascript', onChange }) =>
 
             {activePanel === 'console' && (
               <div className="p-3 font-mono text-xs overflow-y-auto h-full flex flex-col">
-                <div className="text-white/60 mb-2 uppercase tracking-widest font-bold flex items-center gap-1">
-                  <PlayCircle className="w-3 h-3" /> Console Output
+                <div className="text-white/60 mb-2 uppercase tracking-widest font-bold flex items-center justify-between">
+                  <span className="flex items-center gap-1">
+                    <PlayCircle className="w-3 h-3" /> Console Output
+                  </span>
+                  {isSimulated && (
+                    <span className="text-[10px] bg-amber-500/20 text-amber-400 border border-amber-500/30 px-2 py-0.5 rounded font-bold uppercase tracking-wider flex items-center gap-1">
+                      <AlertTriangle className="w-3 h-3" /> AI-Simulated
+                    </span>
+                  )}
                 </div>
+                {isSimulated && (
+                  <div className="mb-3 p-2.5 rounded-lg bg-amber-500/10 border border-amber-500/30 text-amber-300 text-[11px] leading-relaxed flex items-start gap-2">
+                    <AlertTriangle className="w-4 h-4 shrink-0 text-amber-400 mt-0.5" />
+                    <div>
+                      <strong className="block text-amber-200">Isolated Sandbox Unavailable</strong>
+                      <span>Host execution is disabled for security. This output was predicted by Gemini AI and is simulated, not actual compiled execution.</span>
+                    </div>
+                  </div>
+                )}
                 {selectedLanguage === 'html' ? (
                   <div className="flex-1 bg-white rounded-lg overflow-hidden border border-slate-700 h-full min-h-[250px] mt-1">
                     <iframe
@@ -923,7 +953,7 @@ const CodeSandbox = ({ initialCode = '', language = 'javascript', onChange }) =>
                     />
                   </div>
                 ) : (
-                  <pre className={`whitespace-pre-wrap ${antigravityMode && output.includes('ANTIGRAVITY SAYS') ? 'text-purple-300' : 'text-emerald-400'}`}>
+                  <pre className={`whitespace-pre-wrap ${isSimulated ? 'text-amber-300/90' : antigravityMode && output.includes('ANTIGRAVITY SAYS') ? 'text-purple-300' : 'text-emerald-400'}`}>
                     {output || 'Ready.'}
                   </pre>
                 )}

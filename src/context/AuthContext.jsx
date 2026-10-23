@@ -83,6 +83,9 @@ export const AuthProvider = ({ children }) => {
   const loginWithGoogle = async () => {
     setLoading(true);
     try {
+      if (!auth) {
+        throw new Error('Google Sign-In is unavailable. Firebase client credentials are not configured in environment variables.');
+      }
       const result = await signInWithPopup(auth, googleProvider);
       const userPayload = {
         uid: result.user.uid,
@@ -110,6 +113,7 @@ export const AuthProvider = ({ children }) => {
     setToken(null);
     localStorage.removeItem('user');
     localStorage.removeItem('token');
+    localStorage.removeItem('proctoring_block_until');
   };
 
   const updateProfile = async (updatedFields) => {

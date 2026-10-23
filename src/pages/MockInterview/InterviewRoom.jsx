@@ -46,11 +46,10 @@ const InterviewRoom = () => {
   const [typedAnswer, setTypedAnswer] = useState('');
   const [activeLeftTab, setActiveLeftTab] = useState('ai'); // 'ai' or 'camera'
   const [answerMode, setAnswerMode] = useState('text'); // 'voice' or 'text'
+  const [submitError, setSubmitError] = useState(null);
   
   // Lobby and Verification State
   const [verified, setVerified] = useState(false);
-  const [faceMatched, setFaceMatched] = useState(false);
-  const [matchingFace, setMatchingFace] = useState(false);
   const [lightingStatus, setLightingStatus] = useState('good');
   const [lightingVal, setLightingVal] = useState(120);
   const [audioLevel, setAudioLevel] = useState(0);
@@ -114,7 +113,7 @@ const InterviewRoom = () => {
   });
 
   // Multi-Face Detection
-  const { faceCount, modelLoaded, getPresenceScore, checkLighting, simulateFaceMatch } = useFaceDetection(videoRef, !!stream);
+  const { faceCount, modelLoaded, getPresenceScore, checkLighting } = useFaceDetection(videoRef, !!stream);
 
   useEffect(() => {
     faceCountRef.current = faceCount;
@@ -181,23 +180,6 @@ const InterviewRoom = () => {
     return () => clearInterval(interval);
   }, [verified, stream]);
 
-  // Run face matching when face is first detected in the lobby
-  useEffect(() => {
-    if (verified || faceCount !== 1 || faceMatched || matchingFace) return;
-    
-    setMatchingFace(true);
-    simulateFaceMatch().then((res) => {
-      if (res.matched) {
-        setFaceMatched(true);
-        setMatchingFace(false);
-        addNotification({
-          title: "Identity Verified",
-          message: `Face match verified successfully with ${res.confidence}% confidence.`,
-          type: "success"
-        });
-      }
-    });
-  }, [verified, faceCount, faceMatched, matchingFace]);
 
   // Zoom monitoring / check dynamically
   useEffect(() => {
@@ -234,16 +216,6 @@ const InterviewRoom = () => {
     return () => clearInterval(interval);
   }, [isOnline, verified, submitting, qaPairs]);
 
-  // Gaze check simulation
-  useEffect(() => {
-    if (!verified || submitting) return;
-    const gazeInterval = setInterval(() => {
-      if (Math.random() < 0.1) {
-        triggerWarning("⚠️ Gaze deviation detected! Please look directly at the screen during the assessment.");
-      }
-    }, 25000);
-    return () => clearInterval(gazeInterval);
-  }, [verified, submitting]);
 
   // Enforced Full Screen listener
   useEffect(() => {
@@ -367,6 +339,9 @@ const InterviewRoom = () => {
         
         const blockUntil = Date.now() + 30 * 60 * 1000;
         localStorage.setItem(`proctoring_block_until`, blockUntil.toString());
+        if (user?.id) {
+          localStorage.setItem(`proctoring_block_until_${user.id}`, blockUntil.toString());
+        }
       } catch (err) {
         console.error("Failed to suspend user:", err);
       }
@@ -650,15 +625,18 @@ Questions: ${JSON.stringify(questionTexts)}`;
     if (submitStartedRef.current) return;
     submitStartedRef.current = true;
     setSubmitting(true);
+    setSubmitError(null);
     window.speechSynthesis.cancel();
     if (timerRef.current) {
       clearInterval(timerRef.current);
       timerRef.current = null;
     }
+
+    const pairsToSubmit = (Array.isArray(finalPairs) && finalPairs.length > 0) ? finalPairs : qaPairs;
     
     try {
       const score = getPresenceScore();
-      const report = await interviewService.submitInterview(id, finalPairs, elapsed, disqualified, score);
+      const report = await interviewService.submitInterview(id, pairsToSubmit, elapsed, disqualified, score);
       
       // Trigger a live notification
       addNotification({
@@ -668,10 +646,13 @@ Questions: ${JSON.stringify(questionTexts)}`;
         link: `/interview/report/${report.id}`
       });
 
-      navigate(`/interview/report/${report.id}`);
+      navigate(`/interview/report/${report.id}`, { state: { report } });
     } catch (e) {
-      console.error(e);
+      console.error('Interview submission failed:', e);
+      submitStartedRef.current = false;
       setSubmitting(false);
+      const errMsg = e.response?.data?.error || e.message || 'Submission failed due to a network or server error. Your answers have been preserved. Please retry.';
+      setSubmitError(errMsg);
     }
   };
 
@@ -727,12 +708,7 @@ Questions: ${JSON.stringify(questionTexts)}`;
                     muted
                     className="w-full h-full object-cover transform -scale-x-100"
                   />
-                  {faceCount === 1 && !faceMatched && (
-                    <div className="absolute inset-x-8 top-6 bottom-6 border-2 border-dashed border-[#27845B] rounded-xl animate-pulse flex items-center justify-center">
-                      <div className="absolute w-full h-0.5 bg-[#27845B] top-0 left-0 animate-scan shadow-sm" />
-                    </div>
-                  )}
-                  {faceMatched && (
+                  {faceCount === 1 && (
                     <div className="absolute top-3 right-3 bg-[#27845B] text-white rounded-full p-1.5 shadow-sm">
                       <ShieldCheck className="w-4 h-4" />
                     </div>
@@ -797,22 +773,22 @@ Questions: ${JSON.stringify(questionTexts)}`;
                     </div>
 
                     <div className="flex items-start gap-3.5">
-                  <div className={`p-1.5 rounded-full flex-shrink-0 mt-0.5 ${faceCount === 1 ? 'bg-[#27845B]/10 text-[#27845B]' : 'bg-[#C44848]/10 text-[#C44848]'}`}>
+                      <div className={`p-1.5 rounded-full flex-shrink-0 mt-0.5 ${faceCount === 1 ? 'bg-[#27845B]/10 text-[#27845B]' : 'bg-[#C44848]/10 text-[#C44848]'}`}>
                         {faceCount === 1 ? <ShieldCheck className="w-4 h-4" /> : <AlertTriangle className="w-4 h-4" />}
                       </div>
                       <div>
                         <h4 className="text-xs font-bold text-[#10194A] dark:text-[#FAF5EF]">Single Candidate Presence</h4>
-                        <p className="text-xs text-[#666675] dark:text-[#C4C4D4] mt-0.5">Ensure you are sitting directly in front of the lens alone.</p>
+                        <p className="text-xs text-[#666675] dark:text-[#C4C4D4] mt-0.5">Verified in real-time via client-side BlazeFace model.</p>
                       </div>
                     </div>
 
-                    <div className="flex items-start gap-3.5">
-                      <div className={`p-1.5 rounded-full flex-shrink-0 mt-0.5 ${faceMatched ? 'bg-[#27845B]/10 text-[#27845B]' : 'bg-[#C44848]/10 text-[#C44848]'}`}>
-                        {faceMatched ? <ShieldCheck className="w-4 h-4" /> : <AlertTriangle className="w-4 h-4" />}
+                    <div className="flex items-start gap-3.5 opacity-60">
+                      <div className="p-1.5 rounded-full flex-shrink-0 mt-0.5 bg-slate-500/10 text-slate-400">
+                        <AlertTriangle className="w-4 h-4" />
                       </div>
                       <div>
-                        <h4 className="text-xs font-bold text-[#10194A] dark:text-[#FAF5EF]">Facial Signature Verification</h4>
-                        <p className="text-xs text-[#666675] dark:text-[#C4C4D4] mt-0.5">Matches candidate facial pattern against registration records.</p>
+                        <h4 className="text-xs font-bold text-[#10194A] dark:text-[#FAF5EF]">Biometric Photo-ID Verification <span className="text-[10px] uppercase font-normal text-slate-400">(Not Implemented)</span></h4>
+                        <p className="text-xs text-[#666675] dark:text-[#C4C4D4] mt-0.5">Biometric facial signature matching against registration records is unavailable.</p>
                       </div>
                     </div>
                   </>
@@ -835,7 +811,7 @@ Questions: ${JSON.stringify(questionTexts)}`;
 
               <div className="pt-4 border-t border-[#E7E2DC] dark:border-white/10 space-y-2">
                 <button
-                  disabled={template?.isVideo ? !(stream && audioLevel > 5 && lightingStatus === 'good' && faceCount === 1 && faceMatched) : !(audioLevel > 5)}
+                  disabled={template?.isVideo ? !(stream && audioLevel > 5 && lightingStatus === 'good' && faceCount === 1) : !(audioLevel > 5)}
                   onClick={enterExamHall}
                   className="w-full flex items-center justify-center gap-2 py-3 bg-[#E97878] hover:bg-[#DC6666] disabled:bg-[#E7E2DC] disabled:text-[#666675] disabled:cursor-not-allowed text-white font-semibold text-sm rounded-xl shadow-xs transition-all active:scale-[0.98]"
                 >
@@ -1091,6 +1067,28 @@ Questions: ${JSON.stringify(questionTexts)}`;
                 />
               </div>
             </div>
+
+            {/* Submission Error & Retry Banner */}
+            {submitError && (
+              <div className="p-4 rounded-xl bg-[#C44848]/10 border border-[#C44848]/30 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-xs text-[#C44848]">
+                <div className="flex items-start gap-2.5">
+                  <AlertTriangle className="w-4 h-4 flex-shrink-0 mt-0.5 text-[#C44848]" />
+                  <div>
+                    <p className="font-bold">Evaluation Submission Failed</p>
+                    <p className="text-[#666675] dark:text-[#C4C4D4] mt-0.5">{submitError}</p>
+                    <p className="text-[11px] text-[#666675] dark:text-[#C4C4D4] mt-0.5">Your answers ({qaPairs.length} recorded) are preserved. Check connection and click Retry.</p>
+                  </div>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => handleSubmitInterview(qaPairs)}
+                  disabled={submitting}
+                  className="px-4 py-2 rounded-xl bg-[#C44848] text-white font-semibold text-xs hover:bg-[#AA3737] transition-all flex-shrink-0 self-end sm:self-center"
+                >
+                  {submitting ? 'Retrying...' : 'Retry Submission'}
+                </button>
+              </div>
+            )}
 
             {/* Bottom Action Bar */}
             <div className="flex items-center justify-between pt-2">

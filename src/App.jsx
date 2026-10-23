@@ -41,13 +41,16 @@ const ProtectedRoute = ({ allowedRoles = [] }) => {
   }
 
   // Check suspension status specific to this user account
-  const blockUntilStr = localStorage.getItem(`proctoring_block_until_${user.id}`);
+  const userBlockKey = `proctoring_block_until_${user.id}`;
+  const blockUntilStr = localStorage.getItem(userBlockKey);
   if (blockUntilStr) {
     const blockUntil = parseInt(blockUntilStr, 10);
-    if (Date.now() < blockUntil) {
+    if (!isNaN(blockUntil) && Date.now() < blockUntil) {
+      localStorage.setItem('proctoring_block_until', blockUntil.toString());
       return <Navigate to="/suspended" replace />;
     } else {
-      localStorage.removeItem(`proctoring_block_until_${user.id}`);
+      localStorage.removeItem(userBlockKey);
+      localStorage.removeItem('proctoring_block_until');
     }
   }
 

@@ -1,5 +1,6 @@
 const db = require('../utils/mysql');
 const jwt = require('jsonwebtoken');
+const bcrypt = require('bcryptjs');
 const { OAuth2Client } = require('google-auth-library');
 
 const googleClient = new OAuth2Client(process.env.GOOGLE_CLIENT_ID || 'placeholder-client-id');
@@ -31,9 +32,11 @@ const safeUser = (u) => {
 };
 
 const ensureDefaultUsers = async () => {
+  const studentHash = await bcrypt.hash('password123', 10);
+  const adminHash = await bcrypt.hash('admin', 10);
   const defaults = [
-    { id: '1', name: 'Alex Johnson', email: 'student@elevateai.com', password: 'password123', role: 'student', title: 'Full Stack Engineer Intern', skills: JSON.stringify(['React', 'Node.js', 'CSS', 'JavaScript']), bio: 'Aspiring software developer passionate about building high-fidelity client applications.' },
-    { id: '2', name: 'Admin user', email: 'admin@elevateai.com', password: 'admin', role: 'admin', title: 'Head of Talent Acquisition', skills: JSON.stringify(['Recruiting', 'Management', 'HR Tech']), bio: 'Managing the AI question banks and reviewing applicant preparation portfolios.' }
+    { id: '1', name: 'Alex Johnson', email: 'student@elevateai.com', password: studentHash, role: 'student', title: 'Full Stack Engineer Intern', skills: JSON.stringify(['React', 'Node.js', 'CSS', 'JavaScript']), bio: 'Aspiring software developer passionate about building high-fidelity client applications.' },
+    { id: '2', name: 'Admin user', email: 'admin@elevateai.com', password: adminHash, role: 'admin', title: 'Head of Talent Acquisition', skills: JSON.stringify(['Recruiting', 'Management', 'HR Tech']), bio: 'Managing the AI question banks and reviewing applicant preparation portfolios.' }
   ];
   for (const u of defaults) {
     await db.execute(
@@ -48,8 +51,11 @@ const ensureDefaultUsers = async () => {
 const login = async (req, res) => {
   try {
     await ensureDefaultUsers();
-    const { email, password, deviceId, rememberDevice } = req.body;
-    const [rows] = await db.execute('SELECT * FROM users WHERE email = ?', [email]);
+    const { email, password, deviceId, rememberDevice } = req.body || {};
+    if (!email || !password || typeof email !== 'string' || typeof password !== 'string') {
+      return res.status(400).json({ error: 'Valid email and password are required' });
+    }
+    const [rows] = await db.execute('SELECT * FROM users WHERE email = ?', [email.trim().toLowerCase()]);
     if (rows.length === 0) return res.status(401).json({ error: 'Invalid email or password' });
     const user = rows[0];
 
@@ -68,7 +74,25 @@ const login = async (req, res) => {
     const ip = req.ip || req.headers['x-forwarded-for'] || req.socket.remoteAddress;
     const device = req.headers['user-agent'] || 'Unknown Device';
 
-    if (user.password !== password) {
+    // Verify password using bcrypt with legacy plaintext fallback & auto-upgrade
+    let passwordMatch = false;
+    const isBcrypt = user.password && (user.password.startsWith('$2a$') || user.password.startsWith('$2b$'));
+    if (isBcrypt) {
+      passwordMatch = await bcrypt.compare(password, user.password);
+    } else {
+      passwordMatch = (user.password === password);
+      if (passwordMatch) {
+        // Upgrade legacy plaintext password to secure bcrypt hash
+        try {
+          const newHash = await bcrypt.hash(password, 10);
+          await db.execute('UPDATE users SET password=? WHERE id=?', [newHash, user.id]);
+        } catch (upgradeErr) {
+          console.warn('[authController] Failed to upgrade legacy password:', upgradeErr.message);
+        }
+      }
+    }
+
+    if (!passwordMatch) {
       const newAttempts = (user.failed_attempts || 0) + 1;
       let lockoutUntil = null;
       if (newAttempts >= 5) {
@@ -178,18 +202,40 @@ const verifyDeviceCode = async (req, res) => {
 const register = async (req, res) => {
   try {
     await ensureDefaultUsers();
-    const { name, email, password, role } = req.body;
-    const [existing] = await db.execute('SELECT id FROM users WHERE email=?', [email]);
+    const { name, email, password } = req.body;
+    if (!name || !email || !password || typeof name !== 'string' || typeof email !== 'string' || typeof password !== 'string') {
+      return res.status(400).json({ error: 'Name, email, and password are required' });
+    }
+
+    const trimmedName = name.trim();
+    const trimmedEmail = email.trim().toLowerCase();
+
+    if (trimmedName.length < 2 || trimmedName.length > 100) {
+      return res.status(400).json({ error: 'Name must be between 2 and 100 characters' });
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(trimmedEmail) || trimmedEmail.length > 255) {
+      return res.status(400).json({ error: 'Please enter a valid email address' });
+    }
+
+    if (password.length < 8 || password.length > 128) {
+      return res.status(400).json({ error: 'Password must be between 8 and 128 characters' });
+    }
+
+    const [existing] = await db.execute('SELECT id FROM users WHERE email=?', [trimmedEmail]);
     if (existing.length > 0) return res.status(400).json({ error: 'An account with this email already exists' });
 
     const newId = `user-${Date.now()}`;
-    const userRole = role || 'student';
-    const title = userRole === 'admin' ? 'Recruiting Admin' : 'Graduate Candidate';
+    // Security: Public registration role is strictly 'student'; client-supplied roles are discarded.
+    const userRole = 'student';
+    const title = 'Graduate Candidate';
     const sessionId = Math.random().toString(36).substring(2, 15);
+    const hashedPassword = await bcrypt.hash(password, 10);
 
     await db.execute(
       'INSERT INTO users (id, name, email, password, role, title, bio, session_id) VALUES (?,?,?,?,?,?,?,?)',
-      [newId, name, email, password, userRole, title, 'New candidate profile.', sessionId]
+      [newId, trimmedName, trimmedEmail, hashedPassword, userRole, title, 'New candidate profile.', sessionId]
     );
 
     const token = jwt.sign({ id: newId, role: userRole, sessionId }, process.env.JWT_SECRET || 'dev-secret-key', { expiresIn: '7d' });
@@ -268,6 +314,15 @@ const googleLogin = async (req, res) => {
 const suspendAccount = async (req, res) => {
   try {
     const { userId, reason, warnings, ip, device, browser, os } = req.body;
+    if (!userId) {
+      return res.status(400).json({ error: 'User ID is required' });
+    }
+
+    // Security check: Only admins can suspend arbitrary users; regular users can only self-suspend for proctoring strikes
+    if (req.user.role !== 'admin' && String(req.user.id) !== String(userId)) {
+      return res.status(403).json({ error: 'Forbidden: You can only suspend your own account session.' });
+    }
+
     const startTime = Date.now();
     const endTime = startTime + 30 * 60 * 1000;
     const suspendedReason = reason || 'Proctoring violations exceeded limit.';

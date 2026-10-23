@@ -1,37 +1,79 @@
 import React, { useEffect, useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import interviewService from '../../services/interviewService';
 import Card from '../../components/Card';
 import Button from '../../components/Button';
 import Loader from '../../components/Loader';
-import { ArrowLeft, CheckCircle2, XCircle, HelpCircle, BookOpen, Award, Sparkles, Clock } from 'lucide-react';
+import { ArrowLeft, CheckCircle2, XCircle, HelpCircle, BookOpen, Award, Sparkles, Clock, AlertCircle, RefreshCw } from 'lucide-react';
 import { getScoreColor } from '../../utils/formatters';
 import { getTranslation } from '../../utils/translations';
 
 const TestResult = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const [result, setResult] = useState(null);
+  const location = useLocation();
+
+  const [result, setResult] = useState(() => {
+    if (location.state?.result && location.state.result.id === id) {
+      return location.state.result;
+    }
+    return null;
+  });
+  const [loading, setLoading] = useState(!result);
+  const [error, setError] = useState(null);
+
+  const fetchResult = async () => {
+    try {
+      setLoading(true);
+      setError(null);
+      const history = await interviewService.getTestResults();
+      const found = (history || []).find(r => r.id === id);
+      if (!found) {
+        setError('Assessment result record not found or still processing on the server.');
+        return;
+      }
+      setResult(found);
+    } catch (err) {
+      console.error("Failed to load test result:", err);
+      setError('Unable to load test result due to a connection or server error.');
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    const loadResult = async () => {
-      try {
-        const history = await interviewService.getTestResults();
-        const found = (history || []).find(r => r.id === id);
-        if (!found) {
-          navigate('/aptitude');
-          return;
-        }
-        setResult(found);
-      } catch (err) {
-        console.error("Failed to load test result:", err);
-        navigate('/aptitude');
-      }
-    };
-    loadResult();
-  }, [id, navigate]);
+    if (result && result.id === id) {
+      setLoading(false);
+      return;
+    }
+    fetchResult();
+  }, [id]);
 
-  if (!result) return <Loader message={getTranslation('compilingMetrics')} />;
+  if (loading) return <Loader message={getTranslation('compilingMetrics')} />;
+
+  if (error || !result) {
+    return (
+      <div className="max-w-xl mx-auto py-12 animate-fade-in-up">
+        <Card className="text-center p-8 border-[#E7E2DC] bg-white rounded-2xl shadow-sm space-y-4">
+          <div className="w-12 h-12 rounded-full bg-[#C44848]/10 text-[#C44848] flex items-center justify-center mx-auto">
+            <AlertCircle className="w-6 h-6" />
+          </div>
+          <h3 className="text-lg font-bold text-[#10194A]">Result Not Found</h3>
+          <p className="text-xs text-[#666675] max-w-sm mx-auto">
+            {error || 'Unable to retrieve this aptitude test result.'}
+          </p>
+          <div className="flex items-center justify-center gap-3 pt-2">
+            <Button onClick={() => navigate('/aptitude')} variant="secondary" size="sm">
+              Back to Assessment Hub
+            </Button>
+            <Button onClick={fetchResult} variant="primary" icon={RefreshCw} size="sm">
+              Retry
+            </Button>
+          </div>
+        </Card>
+      </div>
+    );
+  }
 
   const accuracyColor = getScoreColor(result.percentage);
 
